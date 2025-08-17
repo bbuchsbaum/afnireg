@@ -29,6 +29,10 @@ This package depends on:
 - Multi-run designs
 - Censoring and nuisance regression
 
+## Quick Start
+
+For a comprehensive tutorial on using `afnireg` to translate fMRI models to AFNI's 3dDeconvolve format, see our [Getting Started vignette](https://bbuchsbaum.github.io/afnireg/articles/afni_tutorial.html).
+
 ## Usage
 
 ```r
@@ -50,7 +54,12 @@ results <- run(model)
 
 ## Documentation
 
-See the package vignette for a complete tutorial:
+### Online Documentation
+- [Package documentation](https://bbuchsbaum.github.io/afnireg/)
+- [Getting Started: Translating to AFNI 3dDeconvolve](https://bbuchsbaum.github.io/afnireg/articles/afni_tutorial.html)
+
+### Vignettes
+View the vignette locally after installation:
 ```r
 vignette("afni_tutorial", package = "afnireg")
 ```
