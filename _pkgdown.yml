@@ -1,0 +1,38 @@
+url: https://bbuchsbaum.github.io/afnireg/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#0054AD"
+    secondary: "#FDB462"
+  
+navbar:
+  structure:
+    left: [intro, reference, articles, tutorials, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/bbuchsbaum/afnireg
+      aria-label: GitHub
+      
+home:
+  title: "afnireg: AFNI Integration for fMRI Analysis in R"
+  description: >
+    An R interface to AFNI's 3dDeconvolve program for fMRI analysis.
+    Specify complex experimental designs and HRF models in R using the 
+    fmridesign framework and execute them using AFNI's optimized 
+    estimation routines.
+    
+  links:
+  - text: Report a bug
+    href: https://github.com/bbuchsbaum/afnireg/issues
+
+articles:
+- title: "Getting Started"
+  contents:
+  - afni_tutorial
+
+authors:
+  Bradley Buchsbaum:
+    href: https://github.com/bbuchsbaum
