@@ -20,17 +20,19 @@ knitr::opts_chunk$set(
   error = TRUE # Allow errors to be displayed for AFNI-specific checks
 )
 library(tibble)
-library(fmrireg)
+library(afnireg)
+library(fmridesign)
+library(fmrihrf)
 # Check if AFNI is available - needed for AFNI-specific HRFs
 # You might replace this with a more robust check, e.g., system("which 3dDeconvolve")
 afni_available <- FALSE # Set to TRUE if AFNI is installed and in PATH
 ```
 
-## Introduction: Generating AFNI Models with `fmrireg`
+## Introduction: Generating AFNI Models with `afnireg`
 
-While `fmrireg` provides tools for fitting fMRI models directly in R (see `fmri_lm`), you might prefer to leverage the robust and efficient estimation methods available in other popular fMRI analysis packages like AFNI.
+The `afnireg` package provides an R interface to AFNI's 3dDeconvolve program for fMRI analysis. It allows you to specify complex experimental designs and HRF models in R using the fmridesign framework and execute them using AFNI's optimized estimation routines.
 
-This vignette demonstrates how to construct a full fMRI regression model within `fmrireg` and then translate it into the syntax and associated files required for AFNI's `3dDeconvolve` program. This allows you to use `fmrireg`'s flexible formula interface and HRF specification tools while utilizing AFNI for the final voxelwise model estimation.
+This vignette demonstrates how to construct a full fMRI regression model within R and then translate it into the syntax and associated files required for AFNI's `3dDeconvolve` program. This allows you to use R's flexible formula interface and HRF specification tools while utilizing AFNI for the final voxelwise model estimation.
 
 The primary function for this translation is `afni_lm()`.
 
@@ -58,7 +60,7 @@ sframe <- sampling_frame(blocklens = 140, TR = TR)
 con1 <- pair_contrast(~ stim == "face", ~stim == "scene", name = "face_scene")
 
 # Create the event model
-emodel <- event_model(onset ~ hrf(stim, contrasts = con1), 
+emodel <- event_model(onset ~ hrf(stim, contrasts = list(con1)), 
                      data = simple_design, 
                      block = ~ run, 
                      sampling_frame = sframe)
@@ -68,8 +70,11 @@ bmodel <- baseline_model(basis = "bs", degree = 5, sframe = sframe)
 
 # Combine into a full fmri_model
 fmodel <- fmri_model(emodel, bmodel)
+```
 
+```{r setup_dataset, eval=FALSE}
 # Define the dataset (using placeholder file names)
+# Note: This requires actual neuroimaging files to run
 dset <- fmri_dataset(scans = "scan01.nii.gz",
                      mask = "mask.nii.gz",
                      TR = TR,
@@ -82,7 +87,8 @@ dset <- fmri_dataset(scans = "scan01.nii.gz",
 
 The `afni_lm()` function takes the `fmri_model` and `fmri_dataset` objects and generates an AFNI model specification.
 
-```{r create_afni_spec}
+```{r create_afni_spec, eval=FALSE}
+# Note: This requires a valid fmri_dataset object (dset)
 alm_spec <- afni_lm(fmodel, dset)
 print(alm_spec)
 ```
@@ -96,9 +102,9 @@ This creates an `afni_lm_spec` object which contains:
 
 **Key Translations:**
 
-*   **HRF Convolution:** `fmrireg` performs the HRF convolution specified in `event_model` (e.g., `hrf(stim)` uses `HRF_SPMG1`) and passes the resulting regressors to `3dDeconvolve` via `-stim_file` arguments. Each condition level gets its own stimulus file (e.g., `stim[face]_reg.1D`).
+*   **HRF Convolution:** The package performs the HRF convolution specified in `event_model` (e.g., `hrf(stim)` uses `HRF_SPMG1`) and passes the resulting regressors to `3dDeconvolve` via `-stim_file` arguments. Each condition level gets its own stimulus file (e.g., `stim[face]_reg.1D`).
 *   **Baseline Model:** Regressors from the `baseline_model` (here, the B-spline basis columns) are included as nuisance regressors via the `-ortvec` argument.
-*   **Contrasts:** `fmrireg` contrasts (like `con1` defined with `pair_contrast`) are automatically converted into AFNI-style general linear tests (GLTs) using the `-gltsym` and `-glt_label` arguments. A separate text file is generated for each GLT (e.g., `GLT_face_scene.txt`).
+*   **Contrasts:** R contrasts (like `con1` defined with `pair_contrast`) are automatically converted into AFNI-style general linear tests (GLTs) using the `-gltsym` and `-glt_label` arguments. A separate text file is generated for each GLT (e.g., `GLT_face_scene.txt`).
 
 ## Handling AFNI's `-polort`
 
@@ -116,13 +122,13 @@ alm_spec_polort <- afni_lm(fmodel_no_drift, dset, polort = 2)
 print(alm_spec_polort)
 ```
 
-However, explicitly defining drift terms in `fmrireg`'s `baseline_model` is generally recommended for consistency.
+However, explicitly defining drift terms in R's `baseline_model` is generally recommended for consistency.
 
 ## Passing Custom `3dDeconvolve` Options
 
 You can pass additional options directly to the `3dDeconvolve` command using the `options` argument in `afni_lm`. This accepts a list where element names correspond to `3dDeconvolve` flags (without the leading `-`) and values are the arguments for those flags.
 
-```{r afni_options_example}
+```{r afni_options_example, eval=FALSE}
 # Example: Request statistic and coefficient buckets, disable t-stat output
 alm_spec_opts <- afni_lm(fmodel, dset, 
                          options = list(bucket = "stats_afni", 
@@ -166,7 +172,7 @@ Refer to the `afni_hrf()` documentation and the `3dDeconvolve` help for details 
 *   **Nuisance Regressors:** If your `baseline_model` includes nuisance regressors loaded from files (e.g., motion parameters), `afni_lm` will include them via the `-ortvec` argument, similar to how drift terms are handled.
 *   **Censoring:** You can provide a censoring vector (or list of vectors per run) to the `censor` argument of `afni_lm`. This will generate a `censor.1D` file and add the `-censor censor.1D` option to the `3dDeconvolve` command.
 
-```{r afni_censor_example}
+```{r afni_censor_example, eval=FALSE}
 # Example: Censor the first 5 scans
 censor_vec <- rep(1, 140) # Start with all scans included (1)
 censor_vec[1:5] <- 0       # Censor first 5 scans (0)
@@ -199,7 +205,7 @@ run(alm_spec_opts, outdir = "glm_afni_output")
 # run(alm_spec_opts, outdir = "glm_afni_output", execute = FALSE)
 ```
 
-This workflow allows you to define complex models in R using `fmrireg` and then leverage AFNI's `3dDeconvolve` for efficient estimation.
+This workflow allows you to define complex models in R using the `afnireg` package and then leverage AFNI's `3dDeconvolve` for efficient estimation.
 
 
 
