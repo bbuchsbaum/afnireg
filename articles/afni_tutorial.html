@@ -63,18 +63,17 @@ Buchsbaum</h4>
     
     
 <div class="section level2">
-<h2 id="introduction-generating-afni-models-with-fmrireg">Introduction: Generating AFNI Models with <code>fmrireg</code><a class="anchor" aria-label="anchor" href="#introduction-generating-afni-models-with-fmrireg"></a>
+<h2 id="introduction-generating-afni-models-with-afnireg">Introduction: Generating AFNI Models with <code>afnireg</code><a class="anchor" aria-label="anchor" href="#introduction-generating-afni-models-with-afnireg"></a>
 </h2>
-<p>While <code>fmrireg</code> provides tools for fitting fMRI models
-directly in R (see <code>fmri_lm</code>), you might prefer to leverage
-the robust and efficient estimation methods available in other popular
-fMRI analysis packages like AFNI.</p>
+<p>The <code>afnireg</code> package provides an R interface to AFNI’s
+3dDeconvolve program for fMRI analysis. It allows you to specify complex
+experimental designs and HRF models in R using the fmridesign framework
+and execute them using AFNI’s optimized estimation routines.</p>
 <p>This vignette demonstrates how to construct a full fMRI regression
-model within <code>fmrireg</code> and then translate it into the syntax
-and associated files required for AFNI’s <code>3dDeconvolve</code>
-program. This allows you to use <code>fmrireg</code>’s flexible formula
-interface and HRF specification tools while utilizing AFNI for the final
-voxelwise model estimation.</p>
+model within R and then translate it into the syntax and associated
+files required for AFNI’s <code>3dDeconvolve</code> program. This allows
+you to use R’s flexible formula interface and HRF specification tools
+while utilizing AFNI for the final voxelwise model estimation.</p>
 <p>The primary function for this translation is
 <code><a href="../reference/afni_lm.html">afni_lm()</a></code>.</p>
 </div>
@@ -103,28 +102,26 @@ voxelwise model estimation.</p>
 <span><span class="va">con1</span> <span class="op">&lt;-</span> <span class="fu">pair_contrast</span><span class="op">(</span><span class="op">~</span> <span class="va">stim</span> <span class="op">==</span> <span class="st">"face"</span>, <span class="op">~</span><span class="va">stim</span> <span class="op">==</span> <span class="st">"scene"</span>, name <span class="op">=</span> <span class="st">"face_scene"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the event model</span></span>
-<span><span class="va">emodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span><span class="va">onset</span> <span class="op">~</span> <span class="fu">hrf</span><span class="op">(</span><span class="va">stim</span>, contrasts <span class="op">=</span> <span class="va">con1</span><span class="op">)</span>, </span>
+<span><span class="va">emodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span><span class="va">onset</span> <span class="op">~</span> <span class="fu">hrf</span><span class="op">(</span><span class="va">stim</span>, contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">con1</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                     data <span class="op">=</span> <span class="va">simple_design</span>, </span>
 <span>                     block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>, </span>
 <span>                     sampling_frame <span class="op">=</span> <span class="va">sframe</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: Failed to evaluate term 'hrf(stim, contrasts = con1)': If `contrasts=` is a list, all elements must be contrast_spec objects.</span></span>
-<span><span class="co">#&gt;   Hint: Use functions like contrast(), pair_contrast(), contrast_set() to define contrasts.</span></span>
 <span></span>
 <span><span class="co"># Create the baseline model (B-spline drift)</span></span>
 <span><span class="va">bmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/baseline_model.html" class="external-link">baseline_model</a></span><span class="op">(</span>basis <span class="op">=</span> <span class="st">"bs"</span>, degree <span class="op">=</span> <span class="fl">5</span>, sframe <span class="op">=</span> <span class="va">sframe</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Combine into a full fmri_model</span></span>
 <span><span class="va">fmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrireg/reference/fmri_model.html" class="external-link">fmri_model</a></span><span class="op">(</span><span class="va">emodel</span>, <span class="va">bmodel</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'emodel' not found</span></span>
-<span></span>
-<span><span class="co"># Define the dataset (using placeholder file names)</span></span>
+<span><span class="co">#&gt; Error in eval(assertion, env): argument "dataset" is missing, with no default</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define the dataset (using placeholder file names)</span></span>
+<span><span class="co"># Note: This requires actual neuroimaging files to run</span></span>
 <span><span class="va">dset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmridataset/reference/fmri_dataset.html" class="external-link">fmri_dataset</a></span><span class="op">(</span>scans <span class="op">=</span> <span class="st">"scan01.nii.gz"</span>,</span>
 <span>                     mask <span class="op">=</span> <span class="st">"mask.nii.gz"</span>,</span>
 <span>                     TR <span class="op">=</span> <span class="va">TR</span>,</span>
 <span>                     run_length <span class="op">=</span> <span class="fl">140</span>,</span>
 <span>                     event_table <span class="op">=</span> <span class="va">simple_design</span>,</span>
-<span>                     base_path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># Assuming files are in the working directory</span></span>
-<span><span class="co">#&gt; Error in tryCatchOne(expr, names, parentenv, handlers[[1L]]): Failed to create backend 'nifti': Source files not found: ./scan01.nii.gz</span></span></code></pre></div>
+<span>                     base_path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># Assuming files are in the working directory</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="translating-the-model-with-afni_lm">Translating the Model with <code>afni_lm</code><a class="anchor" aria-label="anchor" href="#translating-the-model-with-afni_lm"></a>
@@ -132,11 +129,10 @@ voxelwise model estimation.</p>
 <p>The <code><a href="../reference/afni_lm.html">afni_lm()</a></code> function takes the <code>fmri_model</code>
 and <code>fmri_dataset</code> objects and generates an AFNI model
 specification.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">alm_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, <span class="va">dset</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'fmodel' not found</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'alm_spec' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Note: This requires a valid fmri_dataset object (dset)</span></span>
+<span><span class="va">alm_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, <span class="va">dset</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec</span><span class="op">)</span></span></code></pre></div>
 <p>This creates an <code>afni_lm_spec</code> object which contains:</p>
 <ul>
 <li>The original <code>fmri_model</code> and
@@ -150,8 +146,8 @@ specification.</p>
 <p><strong>Key Translations:</strong></p>
 <ul>
 <li>
-<strong>HRF Convolution:</strong> <code>fmrireg</code> performs the
-HRF convolution specified in <code>event_model</code> (e.g.,
+<strong>HRF Convolution:</strong> The package performs the HRF
+convolution specified in <code>event_model</code> (e.g.,
 <code>hrf(stim)</code> uses <code>HRF_SPMG1</code>) and passes the
 resulting regressors to <code>3dDeconvolve</code> via
 <code>-stim_file</code> arguments. Each condition level gets its own
@@ -162,11 +158,11 @@ stimulus file (e.g., <code>stim[face]_reg.1D</code>).</li>
 included as nuisance regressors via the <code>-ortvec</code>
 argument.</li>
 <li>
-<strong>Contrasts:</strong> <code>fmrireg</code> contrasts (like
-<code>con1</code> defined with <code>pair_contrast</code>) are
-automatically converted into AFNI-style general linear tests (GLTs)
-using the <code>-gltsym</code> and <code>-glt_label</code> arguments. A
-separate text file is generated for each GLT (e.g.,
+<strong>Contrasts:</strong> R contrasts (like <code>con1</code>
+defined with <code>pair_contrast</code>) are automatically converted
+into AFNI-style general linear tests (GLTs) using the
+<code>-gltsym</code> and <code>-glt_label</code> arguments. A separate
+text file is generated for each GLT (e.g.,
 <code>GLT_face_scene.txt</code>).</li>
 </ul>
 </div>
@@ -184,7 +180,7 @@ collinear regressors.</p>
 <code>baseline_model</code> and wanted to use AFNI’s polynomial drift
 correction, you could specify <code>polort</code> in the
 <code>afni_lm</code> call:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: No drift in bmodel, use AFNI polort</span></span>
 <span><span class="va">bmodel_no_drift</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/baseline_model.html" class="external-link">baseline_model</a></span><span class="op">(</span>basis <span class="op">=</span> <span class="st">"constant"</span>, sframe <span class="op">=</span> <span class="va">sframe</span><span class="op">)</span> <span class="co"># Only intercept</span></span>
 <span><span class="va">fmodel_no_drift</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrireg/reference/fmri_model.html" class="external-link">fmri_model</a></span><span class="op">(</span><span class="va">emodel</span>, <span class="va">bmodel_no_drift</span><span class="op">)</span></span>
@@ -192,7 +188,7 @@ correction, you could specify <code>polort</code> in the
 <span><span class="co"># Specify polort=2 for quadratic drift</span></span>
 <span><span class="va">alm_spec_polort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel_no_drift</span>, <span class="va">dset</span>, polort <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_polort</span><span class="op">)</span></span></code></pre></div>
-<p>However, explicitly defining drift terms in <code>fmrireg</code>’s
+<p>However, explicitly defining drift terms in R’s
 <code>baseline_model</code> is generally recommended for
 consistency.</p>
 </div>
@@ -204,15 +200,13 @@ consistency.</p>
 argument in <code>afni_lm</code>. This accepts a list where element
 names correspond to <code>3dDeconvolve</code> flags (without the leading
 <code>-</code>) and values are the arguments for those flags.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Request statistic and coefficient buckets, disable t-stat output</span></span>
 <span><span class="va">alm_spec_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, <span class="va">dset</span>, </span>
 <span>                         options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bucket <span class="op">=</span> <span class="st">"stats_afni"</span>, </span>
 <span>                                        cbucket <span class="op">=</span> <span class="st">"coefs_afni"</span>,</span>
 <span>                                        tout <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'fmodel' not found</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_opts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'alm_spec_opts' not found</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_opts</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-afni-native-hrf-basis-functions">Using AFNI-Native HRF Basis Functions<a class="anchor" aria-label="anchor" href="#using-afni-native-hrf-basis-functions"></a>
@@ -224,7 +218,7 @@ This avoids pre-convolution in R and lets <code>3dDeconvolve</code>
 handle the HRF modeling using its optimized routines.</p>
 <p>Use the <code><a href="../reference/afni_hrf.html">afni_hrf()</a></code> specifier within the
 <code>event_model</code> formula instead of <code>hrf()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example using AFNI's BLOCK function for convolution</span></span>
 <span><span class="co"># Note: Using afni_hrf requires AFNI to be installed for 3dDeconvolve to run</span></span>
 <span><span class="va">emodel_afni_block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span></span>
@@ -262,15 +256,13 @@ list of vectors per run) to the <code>censor</code> argument of
 and add the <code>-censor censor.1D</code> option to the
 <code>3dDeconvolve</code> command.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Censor the first 5 scans</span></span>
 <span><span class="va">censor_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">140</span><span class="op">)</span> <span class="co"># Start with all scans included (1)</span></span>
 <span><span class="va">censor_vec</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span>       <span class="co"># Censor first 5 scans (0)</span></span>
 <span></span>
 <span><span class="va">alm_spec_censored</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, <span class="va">dset</span>, censor <span class="op">=</span> <span class="va">censor_vec</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'dset' not found</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_censored</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'alm_spec_censored' not found</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_censored</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="generating-files-and-running-the-model">Generating Files and Running the Model<a class="anchor" aria-label="anchor" href="#generating-files-and-running-the-model"></a>
@@ -278,7 +270,7 @@ and add the <code>-censor censor.1D</code> option to the
 <p>Once you have the <code>afni_lm_spec</code> object, you can generate
 the necessary files and optionally execute the <code>3dDeconvolve</code>
 command using the <code><a href="../reference/run.html">run()</a></code> method.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This command will:</span></span>
 <span><span class="co"># 1. Create the output directory 'glm_afni_output'.</span></span>
 <span><span class="co"># 2. Change into that directory.</span></span>
@@ -296,9 +288,9 @@ command using the <code><a href="../reference/run.html">run()</a></code> method.
 <span></span>
 <span><span class="co"># To only generate the script and files without running:</span></span>
 <span><span class="co"># run(alm_spec_opts, outdir = "glm_afni_output", execute = FALSE)</span></span></code></pre></div>
-<p>This workflow allows you to define complex models in R using
-<code>fmrireg</code> and then leverage AFNI’s <code>3dDeconvolve</code>
-for efficient estimation.</p>
+<p>This workflow allows you to define complex models in R using the
+<code>afnireg</code> package and then leverage AFNI’s
+<code>3dDeconvolve</code> for efficient estimation.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
