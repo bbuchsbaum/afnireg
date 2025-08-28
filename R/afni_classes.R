@@ -119,6 +119,7 @@ requires_external_processing.afni_trialwise_convolved_term <- function(x) {
 #' Get Number of Basis Functions for AFNI Terms
 #'
 #' @param x An AFNI convolved term object
+#' @param ... Additional arguments (not used)
 #' @return Number of basis functions
 #' @export
 nbasis.afni_hrf_convolved_term <- function(x, ...) {
@@ -196,6 +197,7 @@ is_continuous.afni_trialwise_convolved_term <- function(x, ...) {
 #' Get Number of Basis Functions for Event Terms
 #' 
 #' @param x An event_term object  
+#' @param ... Additional arguments (not used)
 #' @return Number of basis functions
 #' @export
 #' @importFrom fmrihrf nbasis

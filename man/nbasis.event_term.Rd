@@ -4,10 +4,12 @@
 \alias{nbasis.event_term}
 \title{Get Number of Basis Functions for Event Terms}
 \usage{
-\method{nbasis}{event_term}(x)
+\method{nbasis}{event_term}(x, ...)
 }
 \arguments{
 \item{x}{An event_term object}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 Number of basis functions

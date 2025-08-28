@@ -41,7 +41,16 @@
         convolved_class = NULL,
         requires_external_processing = TRUE
       )
-      
+    }
+  }
+  
+  invisible()
+}
+
+.onAttach <- function(libname, pkgname) {
+  # Check if fmridesign is available and extensions were registered
+  if (requireNamespace("fmridesign", quietly = TRUE)) {
+    if (exists("register_hrfspec_extension", where = asNamespace("fmridesign"))) {
       packageStartupMessage("AFNI HRF specifications registered with fmridesign")
     }
   }

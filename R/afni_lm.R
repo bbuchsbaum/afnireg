@@ -8,7 +8,7 @@
 #' @keywords internal
 #' @noRd
 gen_afni_lm.fmri_config <- function(x, ...) {
-  mspec <- gen_model_spec(x)
+  mspec <- fmrireg::gen_model_spec(x)
   gen_afni_lm.fmri_model(mspec,...)
   #gen_afni_lm(x$event_model, x$baseline_model, ...)
 }

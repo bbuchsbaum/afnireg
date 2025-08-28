@@ -4,10 +4,12 @@
 \alias{nbasis.afni_hrf_convolved_term}
 \title{Get Number of Basis Functions for AFNI Terms}
 \usage{
-\method{nbasis}{afni_hrf_convolved_term}(x)
+\method{nbasis}{afni_hrf_convolved_term}(x, ...)
 }
 \arguments{
 \item{x}{An AFNI convolved term object}
+
+\item{...}{Additional arguments (not used)}
 }
 \value{
 Number of basis functions
