@@ -17,3 +17,8 @@ docs/
 # OS/editor
 .DS_Store
 *.swp
+
+# Local AFNI test outputs and debug scripts
+afni_test/
+simple_test.R
+trace_options_bug.R

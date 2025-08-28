@@ -1,1 +1,0 @@
-3dDeconvolve -nodata 200 2 -polort -1 -num_stimts 1 -num_glt 0 -stim_label 1 stim -ortvec baseline_poly_1_1.1D baseline_poly_1_1 -ortvec baseline_poly_1_2.1D baseline_poly_1_2 -ortvec constant_1.1D constant_1 -ortvec constant_2.1D constant_2 -stim_times 1 stim_times.1D GAM\(8.6,0.547\) -TR_times 1 -nofullf_atall -tout -cbucket coefout -bucket statout -jobs 1 -float

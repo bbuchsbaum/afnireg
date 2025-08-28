@@ -1,4 +1,0 @@
-*+ WARNING: '-stim_times 1' file 'Fac1.aa_Fac2.cc_times.1D' has 3 rows, but dataset has 1 time blocks
-*+ WARNING: '-stim_times 2' file 'Fac1.bb_Fac2.cc_times.1D' has 3 rows, but dataset has 1 time blocks
-*+ WARNING: '-stim_times 3' file 'Fac1.aa_Fac2.dd_times.1D' has 3 rows, but dataset has 1 time blocks
-*+ WARNING: '-stim_times 4' file 'Fac1.bb_Fac2.dd_times.1D' has 3 rows, but dataset has 1 time blocks
