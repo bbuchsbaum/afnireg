@@ -228,6 +228,19 @@ print(alm_spec_nodata)
 # run(alm_spec_nodata, outdir = "glm_afni_x1d", execute = FALSE)
 ```
 
+Note on multi-run nodata: If your event model uses multiple runs (e.g., via `block = ~ run` in `event_model`) and you provide `nodata`, `afnireg` automatically adds a `-concat` string assuming equal run lengths. The run starts are computed from `nTR / n_runs` and added as `-concat '1D: 0 start2 start3 ...'`.
+
+```{r afni_nodata_concat, eval=FALSE}
+# Example: two runs implied by the event model, total of 280 TRs
+alm_spec_nodata2 <- afni_lm(
+  fmodel,
+  dataset = NULL,
+  nodata = c(280, TR)
+)
+cat(alm_spec_nodata2$cmd$cmd, "\n")
+# Expect to see: -concat '1D: 0 140'
+```
+
 ## Impulse Responses (`-iresp`)
 
 Set `iresp = TRUE` in `afni_lm()` to have AFNI write impulse response estimates for `afni_hrf()` terms.
@@ -263,5 +276,4 @@ run(alm_spec_opts, outdir = "glm_afni_output")
 ```
 
 This workflow allows you to define complex models in R using the `afnireg` package and then leverage AFNI's `3dDeconvolve` for efficient estimation.
-
 
