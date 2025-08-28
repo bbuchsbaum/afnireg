@@ -233,6 +233,13 @@ afni_trialwise <- function(label, basis=c("spmg1", "block", "dmblock", "gamma", 
 #' AFNI-native HRF basis constructors. These functions create `AFNI_HRF`
 #' objects corresponding to AFNI’s built-in basis families.
 #'
+#' @param d Duration parameter (seconds) used by SPMG/BLOCK/WAV families
+#' @param p Penalty or additional parameter for BLOCK/dmBLOCK
+#' @param b Start time (seconds) for multi-basis families (e.g., TENT/CSPLIN/POLY/SIN)
+#' @param c Stop time (seconds) for multi-basis families (e.g., TENT/CSPLIN/POLY/SIN)
+#' @param n Number of basis functions/knots/degrees for multi-basis families
+#' @param q Shape parameter for `AFNI_GAM`
+#'
 #' @section Constructors:
 #' - `AFNI_SPMG1(d=1)` – SPMG1 (canonical), duration `d` seconds
 #' - `AFNI_SPMG2(d=1)` – SPMG2, duration `d`

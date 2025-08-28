@@ -44,6 +44,8 @@ afni_command_switch <- function(x, ...) UseMethod("afni_command_switch")
 #'
 #' @param x An AFNI stimulus object
 #' @param ... Additional arguments (e.g., target directory)
+#' @param stim For methods: stimulus object to write
+#' @param dir For methods: output directory path
 #' @export
 write_afni_stim <- function(x, ...) UseMethod("write_afni_stim")
 

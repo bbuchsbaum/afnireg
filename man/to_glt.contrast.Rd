@@ -6,7 +6,21 @@
 \usage{
 \method{to_glt}{contrast}(x, ...)
 }
+\arguments{
+\item{x}{A `contrast` object}
+
+\item{...}{Unused, for method compatibility}
+}
+\value{
+A `glt` or `glt_contrast_list` object containing GLT string(s)
+}
 \description{
 This file contains functions for handling contrasts in AFNI models,
 including conversion to GLT (General Linear Test) format.
+}
+\details{
+Convert a contrast to AFNI GLT
+
+Converts a `contrast` object from fmridesign into an AFNI GLT string
+(or list of GLT strings for multi-column contrasts).
 }

@@ -17,3 +17,9 @@
 This file contains the construct methods that build AFNI convolved terms
 from HRF specifications and model data.
 }
+\keyword{Construct}
+\keyword{afni_hrf_convolved_term}
+\keyword{afni_hrfspec}
+\keyword{an}
+\keyword{from}
+\keyword{internal}

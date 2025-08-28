@@ -2,10 +2,25 @@
 % Please edit documentation in R/afni_lm.R
 \name{afni_lm_spec}
 \alias{afni_lm_spec}
-\title{afni_lm_spec constructor}
+\title{Construct an afni_lm_spec object}
 \usage{
 afni_lm_spec(model, dataset, working_dir, options, cmd)
 }
+\arguments{
+\item{model}{An `fmri_model` used to generate the AFNI command}
+
+\item{dataset}{An `fmri_dataset` or NULL if using `nodata`}
+
+\item{working_dir}{Character path used when generating files}
+
+\item{options}{A named list of options passed to command generation}
+
+\item{cmd}{A list with `cmd` (string) and other command metadata}
+}
+\value{
+An object of class `afni_lm_spec`
+}
 \description{
-afni_lm_spec constructor
+Creates an `afni_lm_spec` object bundling the model, dataset, options,
+working directory, and generated 3dDeconvolve command.
 }

@@ -14,10 +14,15 @@ gen_afni_lm <- function(x, ...) {
 
 #' Build AFNI Stimulus Files
 #' 
-#' Generic function to build AFNI stimulus files
+#' Generic function to build AFNI stimulus files from model terms.
+#' Methods may accept additional arguments such as `iresp` (logical,
+#' request impulse response outputs) and `tr_times` (numeric, TR in
+#' seconds) used by AFNI-native HRF terms.
 #' 
-#' @param x The input object
-#' @param ... Additional arguments
+#' @param x The input object (e.g., term)
+#' @param ... Additional arguments, e.g., `iresp`, `tr_times`
+#' @param iresp Logical; request impulse response outputs when supported
+#' @param tr_times Numeric TR in seconds passed to timing-based terms
 #' @export
 build_afni_stims <- function(x, ...) {
   UseMethod("build_afni_stims")

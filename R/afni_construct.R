@@ -3,8 +3,7 @@
 #' This file contains the construct methods that build AFNI convolved terms
 #' from HRF specifications and model data.
 #'
-#' @importFrom fmridesign event_term construct
-#' @importFrom rlang quo_get_expr
+#' @keywords internal
 
 #' Construct an afni_hrf_convolved_term from an afni_hrfspec
 #' 
