@@ -125,7 +125,7 @@ write_stim_files <- function(afni_stims) {
 
 #' @rdname write_afni_stim
 #' @export
-write_afni_stim.afni_stim_file <- function(stim, dir) {
+write_afni_stim.afni_stim_file <- function(stim, dir, ...) {
   if (any(is.na(stim$values))) {
     stim$values[is.na(stim$values)] <- 0
   }
@@ -141,7 +141,7 @@ write_afni_stim.afni_stim_file <- function(stim, dir) {
 
 #' @rdname write_afni_stim
 #' @export
-write_afni_stim.afni_stim_times <- function(stim, dir) {
+write_afni_stim.afni_stim_times <- function(stim, dir, ...) {
   # Create lines for each run
   lines <- sapply(stim$onsets, function(ons) {
     if (length(ons) == 0) {
@@ -160,7 +160,7 @@ write_afni_stim.afni_stim_times <- function(stim, dir) {
 
 #' @rdname write_afni_stim
 #' @export
-write_afni_stim.afni_stim_im_times <- function(stim, dir) {
+write_afni_stim.afni_stim_im_times <- function(stim, dir, ...) {
   # Similar to stim_times but with modulation values
   lines <- sapply(stim$onsets, function(ons) {
     if (length(ons) == 0) {

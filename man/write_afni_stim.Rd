@@ -9,11 +9,11 @@
 \usage{
 write_afni_stim(x, ...)
 
-\method{write_afni_stim}{afni_stim_file}(stim, dir)
+\method{write_afni_stim}{afni_stim_file}(stim, dir, ...)
 
-\method{write_afni_stim}{afni_stim_times}(stim, dir)
+\method{write_afni_stim}{afni_stim_times}(stim, dir, ...)
 
-\method{write_afni_stim}{afni_stim_im_times}(stim, dir)
+\method{write_afni_stim}{afni_stim_im_times}(stim, dir, ...)
 }
 \arguments{
 \item{x}{An AFNI stimulus object}
