@@ -8,11 +8,11 @@
 \alias{build_afni_stims}
 \title{Build AFNI Stimulus Files}
 \usage{
-\method{build_afni_stims}{convolved_term}(x, iresp = FALSE, tr_times = 1)
+\method{build_afni_stims}{convolved_term}(x, iresp = FALSE, tr_times = 1, ...)
 
-\method{build_afni_stims}{afni_hrf_convolved_term}(x, iresp = FALSE, tr_times = 1)
+\method{build_afni_stims}{afni_hrf_convolved_term}(x, iresp = FALSE, tr_times = 1, ...)
 
-\method{build_afni_stims}{afni_trialwise_convolved_term}(x, iresp = FALSE, tr_times = 1)
+\method{build_afni_stims}{afni_trialwise_convolved_term}(x, iresp = FALSE, tr_times = 1, ...)
 
 \method{build_afni_stims}{event_term}(x, iresp = FALSE, tr_times = 1, ...)
 

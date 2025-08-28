@@ -37,16 +37,18 @@ afni_stim_im_times <- function(label, file_name, hrf, onsets, blockids) {
 #' @noRd
 afni_command_switch <- function(x, ...) UseMethod("afni_command_switch")
 
-#' Write AFNI stimulus files
+#' Write AFNI stimulus files (internal)
 #'
 #' Generic for writing AFNI stimulus specifications (values, times, or
 #' individually-modulated times) to disk in AFNI-compatible formats.
+#' Internal helper used by run(); not part of the user API.
 #'
 #' @param x An AFNI stimulus object
 #' @param ... Additional arguments (e.g., target directory)
 #' @param stim For methods: stimulus object to write
 #' @param dir For methods: output directory path
-#' @export
+#' @keywords internal
+#' @noRd
 write_afni_stim <- function(x, ...) UseMethod("write_afni_stim")
 
 
@@ -123,8 +125,8 @@ write_stim_files <- function(afni_stims) {
   })
 }
 
-#' @rdname write_afni_stim
-#' @export
+#' @keywords internal
+#' @noRd
 write_afni_stim.afni_stim_file <- function(stim, dir, ...) {
   if (any(is.na(stim$values))) {
     stim$values[is.na(stim$values)] <- 0
@@ -139,8 +141,8 @@ write_afni_stim.afni_stim_file <- function(stim, dir, ...) {
   }
 }
 
-#' @rdname write_afni_stim
-#' @export
+#' @keywords internal
+#' @noRd
 write_afni_stim.afni_stim_times <- function(stim, dir, ...) {
   # Create lines for each run
   lines <- sapply(stim$onsets, function(ons) {
@@ -158,8 +160,8 @@ write_afni_stim.afni_stim_times <- function(stim, dir, ...) {
   writeLines(lines, paste(dir, stim$file_name, sep="/"))
 }
 
-#' @rdname write_afni_stim
-#' @export
+#' @keywords internal
+#' @noRd
 write_afni_stim.afni_stim_im_times <- function(stim, dir, ...) {
   # Similar to stim_times but with modulation values
   lines <- sapply(stim$onsets, function(ons) {

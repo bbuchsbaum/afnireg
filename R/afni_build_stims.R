@@ -30,7 +30,7 @@ build_baseline_stims <- function(x) {
 #' @rdname build_afni_stims
 #' @export
 #' @importFrom fmridesign design_matrix longnames
-build_afni_stims.convolved_term <- function(x, iresp=FALSE, tr_times=1) {
+build_afni_stims.convolved_term <- function(x, iresp=FALSE, tr_times=1, ...) {
   # For R-based convolved terms, generate stim_file entries from design matrix columns
   stimlabels <- longnames(x)
   stimfiles <- paste(stimlabels, "_reg.1D", sep = "")
@@ -58,7 +58,7 @@ build_afni_stims.convolved_term <- function(x, iresp=FALSE, tr_times=1) {
 
 #' @rdname build_afni_stims
 #' @export
-build_afni_stims.afni_hrf_convolved_term <- function(x, iresp=FALSE, tr_times=1) {
+build_afni_stims.afni_hrf_convolved_term <- function(x, iresp=FALSE, tr_times=1, ...) {
 
   stimlabels <- longnames(x)
   stimfiles <- paste(stimlabels, "_times.1D", sep = "")
@@ -150,7 +150,7 @@ build_afni_stims.afni_hrf_convolved_term <- function(x, iresp=FALSE, tr_times=1)
 
 #' @rdname build_afni_stims
 #' @export
-build_afni_stims.afni_trialwise_convolved_term <- function(x, iresp=FALSE, tr_times=1) {
+build_afni_stims.afni_trialwise_convolved_term <- function(x, iresp=FALSE, tr_times=1, ...) {
   eterm <- x$evterm
   sf <- x$sampling_frame
   

@@ -23,6 +23,8 @@ gen_afni_lm <- function(x, ...) {
 #' @param ... Additional arguments, e.g., `iresp`, `tr_times`
 #' @param iresp Logical; request impulse response outputs when supported
 #' @param tr_times Numeric TR in seconds passed to timing-based terms
+#' @name build_afni_stims
+#' @rdname build_afni_stims
 #' @export
 build_afni_stims <- function(x, ...) {
   UseMethod("build_afni_stims")
