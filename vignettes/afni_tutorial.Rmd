@@ -24,8 +24,7 @@ library(afnireg)
 library(fmridesign)
 library(fmrihrf)
 # Check if AFNI is available - needed for AFNI-specific HRFs
-# You might replace this with a more robust check, e.g., system("which 3dDeconvolve")
-afni_available <- FALSE # Set to TRUE if AFNI is installed and in PATH
+afni_available <- nzchar(Sys.which("3dDeconvolve"))
 ```
 
 ## Introduction: Generating AFNI Models with `afnireg`
@@ -35,6 +34,12 @@ The `afnireg` package provides an R interface to AFNI's 3dDeconvolve program for
 This vignette demonstrates how to construct a full fMRI regression model within R and then translate it into the syntax and associated files required for AFNI's `3dDeconvolve` program. This allows you to use R's flexible formula interface and HRF specification tools while utilizing AFNI for the final voxelwise model estimation.
 
 The primary function for this translation is `afni_lm()`.
+
+## Prerequisites
+
+- AFNI installed and `3dDeconvolve` available on your `PATH`.
+- Model specification via `fmridesign` (event + baseline models).
+- Optional: An `fmri_dataset` with input scans and mask, or use `nodata` for a dry run.
 
 ## A Simple Model Example
 
@@ -144,12 +149,12 @@ A powerful feature is the ability to specify basis functions within `event_model
 Use the `afni_hrf()` specifier within the `event_model` formula instead of `hrf()`.
 
 ```{r afni_native_hrf, eval=afni_available}
-# Example using AFNI's BLOCK function for convolution
+# Example using AFNI's BLOCK basis (duration=2, penalty defaults to 1)
 # Note: Using afni_hrf requires AFNI to be installed for 3dDeconvolve to run
 emodel_afni_block <- event_model(
-  onset ~ afni_hrf(stim, basis = "BLOCK(2,1)"), # BLOCK(duration, penalty)
-  data = simple_design, 
-  block = ~ run, 
+  onset ~ afni_hrf(stim, basis = "block", durations = 2),
+  data = simple_design,
+  block = ~ run,
   sampling_frame = sframe
 )
 
@@ -167,6 +172,29 @@ cat("Skipping AFNI-native HRF example as AFNI availability check is FALSE.")
 
 Refer to the `afni_hrf()` documentation and the `3dDeconvolve` help for details on available AFNI basis functions and their parameters.
 
+## Trialwise Modulation (`-stim_times_IM`)
+
+For per-trial modulation (e.g., reaction time), use `afni_trialwise()`, which maps to `-stim_times_IM`.
+
+```{r afni_trialwise_example, eval=FALSE}
+# Add a continuous modulator (e.g., RT scaled 0.2–0.8 s)
+set.seed(123)
+simple_design$rt <- runif(nrow(simple_design), 0.2, 0.8)
+
+emodel_tw <- event_model(
+  onset ~ afni_trialwise(rt, basis = "gamma"),
+  data = simple_design,
+  block = ~ run,
+  sampling_frame = sframe
+)
+
+fmodel_tw <- fmri_model(emodel_tw, bmodel)
+alm_spec_tw <- afni_lm(fmodel_tw, dset)
+print(alm_spec_tw)
+
+# The command should include -stim_times_IM for the trialwise regressor.
+```
+
 ## Handling Nuisance Regressors and Censoring
 
 *   **Nuisance Regressors:** If your `baseline_model` includes nuisance regressors loaded from files (e.g., motion parameters), `afni_lm` will include them via the `-ortvec` argument, similar to how drift terms are handled.
@@ -179,6 +207,35 @@ censor_vec[1:5] <- 0       # Censor first 5 scans (0)
 
 alm_spec_censored <- afni_lm(fmodel, dset, censor = censor_vec)
 print(alm_spec_censored)
+```
+
+## Dry Runs with `-nodata` and Design Inspection
+
+You can validate command generation without data by providing `nodata = c(nTR, TR)`. Combine with `x1D_stop = TRUE` to write the design matrix (`.xmat.1D`) and stop before fitting.
+
+```{r afni_nodata_example, eval=FALSE}
+# Single run of 140 TRs with TR=2 sec
+alm_spec_nodata <- afni_lm(
+  fmodel,
+  dataset = NULL,
+  nodata = c(140, TR),
+  x1D_stop = TRUE,
+  options = list(bucket = "stats_afni")
+)
+print(alm_spec_nodata)
+
+# Then generate files/scripts without executing AFNI:
+# run(alm_spec_nodata, outdir = "glm_afni_x1d", execute = FALSE)
+```
+
+## Impulse Responses (`-iresp`)
+
+Set `iresp = TRUE` in `afni_lm()` to have AFNI write impulse response estimates for `afni_hrf()` terms.
+
+```{r afni_iresp_example, eval=FALSE}
+alm_spec_iresp <- afni_lm(fmodel_afni, dset, iresp = TRUE)
+print(alm_spec_iresp)
+# Look for -iresp entries paired with -stim_times terms.
 ```
 
 ## Generating Files and Running the Model
@@ -206,6 +263,5 @@ run(alm_spec_opts, outdir = "glm_afni_output")
 ```
 
 This workflow allows you to define complex models in R using the `afnireg` package and then leverage AFNI's `3dDeconvolve` for efficient estimation.
-
 
 
