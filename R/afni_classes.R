@@ -121,7 +121,7 @@ requires_external_processing.afni_trialwise_convolved_term <- function(x) {
 #' @param x An AFNI convolved term object
 #' @return Number of basis functions
 #' @export
-nbasis.afni_hrf_convolved_term <- function(x) {
+nbasis.afni_hrf_convolved_term <- function(x, ...) {
   # Get the actual nbasis from the HRF object
   if (!is.null(x$hrfspec) && !is.null(x$hrfspec$hrf)) {
     # The AFNI_HRF object has nbasis as an attribute
@@ -135,7 +135,7 @@ nbasis.afni_hrf_convolved_term <- function(x) {
 }
 
 #' @export
-nbasis.afni_trialwise_convolved_term <- function(x) {
+nbasis.afni_trialwise_convolved_term <- function(x, ...) {
   # Get the actual nbasis from the HRF object
   if (!is.null(x$hrfspec) && !is.null(x$hrfspec$hrf)) {
     # The AFNI_HRF object has nbasis as an attribute
@@ -153,13 +153,13 @@ nbasis.afni_trialwise_convolved_term <- function(x) {
 #' @param x An AFNI convolved term object
 #' @return Character vector of short names
 #' @export
-shortnames.afni_hrf_convolved_term <- function(x) {
+shortnames.afni_hrf_convolved_term <- function(x, ...) {
   # For AFNI terms, shortnames match longnames
   longnames(x)
 }
 
 #' @export
-shortnames.afni_trialwise_convolved_term <- function(x) {
+shortnames.afni_trialwise_convolved_term <- function(x, ...) {
   # For AFNI terms, shortnames match longnames
   longnames(x)
 }
@@ -170,7 +170,7 @@ shortnames.afni_trialwise_convolved_term <- function(x) {
 #' @return Logical indicating if the term is continuous
 #' @export
 #' @importFrom fmridesign is_continuous
-is_continuous.afni_hrf_convolved_term <- function(x) {
+is_continuous.afni_hrf_convolved_term <- function(x, ...) {
   # Check if the underlying variable is continuous
   if (!is.null(x$evterm)) {
     # Check if the event term has levels (categorical)
@@ -188,7 +188,7 @@ is_continuous.afni_hrf_convolved_term <- function(x) {
 }
 
 #' @export
-is_continuous.afni_trialwise_convolved_term <- function(x) {
+is_continuous.afni_trialwise_convolved_term <- function(x, ...) {
   # Trialwise terms are typically continuous (individual trial modulation)
   TRUE
 }
@@ -199,7 +199,7 @@ is_continuous.afni_trialwise_convolved_term <- function(x) {
 #' @return Number of basis functions
 #' @export
 #' @importFrom fmrihrf nbasis
-nbasis.event_term <- function(x) {
+nbasis.event_term <- function(x, ...) {
   # For R-based event_term, check the hrfspec attribute
   hrfspec <- attr(x, "hrfspec")
   if (!is.null(hrfspec) && !is.null(hrfspec$hrf)) {
