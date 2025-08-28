@@ -1,0 +1,19 @@
+# R build/check artifacts
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.tar.gz
+
+# Package check outputs
+afnireg.Rcheck/
+..Rcheck/
+
+# Generated vignette/html
+vignettes/*.html
+docs/
+
+# OS/editor
+.DS_Store
+*.swp
