@@ -37,19 +37,46 @@ For a comprehensive tutorial on using `afnireg` to translate fMRI models to AFNI
 
 ```r
 library(afnireg)
+library(fmridesign)
+library(fmrihrf)
 
-# Create an AFNI HRF specification
-hrf_spec <- afni_hrf(type = "SPMG1")
+# 1) Specify an event and baseline model in R
+TR <- 2
+sframe <- sampling_frame(blocklens = 140, TR = TR)
 
-# Build a model for AFNI
-model <- afni_lm(
-  dataset = my_data,
-  event_model = my_events,
-  hrf_spec = hrf_spec
+emodel <- event_model(
+  onset ~ hrf(stim),
+  data = events_df,       # data.frame with columns: onset, stim, run, ...
+  block = ~ run,
+  sampling_frame = sframe
 )
 
-# Run the model in AFNI
-results <- run(model)
+bmodel <- baseline_model(basis = "bs", degree = 5, sframe = sframe)
+fmodel <- fmri_model(emodel, bmodel)
+
+# 2a) With scans: build an AFNI spec
+dset <- fmridataset::fmri_dataset(
+  scans = c("run1.nii.gz", "run2.nii.gz"),
+  mask  = "mask.nii.gz",
+  TR    = TR,
+  run_length = 140,
+  event_table = events_df
+)
+
+alm <- afni_lm(fmodel, dset, options = list(bucket = "stats_afni"))
+run(alm, outdir = "glm_afni_output")
+
+# 2b) Or do a dry run without data (writes .xmat.1D and script)
+alm_nodata <- afni_lm(fmodel, dataset = NULL, nodata = c(140, TR), x1D_stop = TRUE)
+run(alm_nodata, outdir = "glm_afni_x1d", execute = FALSE)
+
+# AFNI-native HRF example (uses -stim_times)
+emodel_afni <- event_model(
+  onset ~ afni_hrf(stim, basis = "block", durations = 2),
+  data = events_df, block = ~ run, sampling_frame = sframe
+)
+fmodel_afni <- fmri_model(emodel_afni, bmodel)
+alm_afni <- afni_lm(fmodel_afni, dset)
 ```
 
 ## Documentation
