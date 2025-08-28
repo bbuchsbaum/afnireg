@@ -1,0 +1,36 @@
+++ 3dDeconvolve extending num_stimts from 1 to 5 due to -ortvec
+++ 3dDeconvolve: AFNI version=AFNI_25.2.07 (Aug  6 2025) [64-bit]
+++ Authored by: B. Douglas Ward, et al.
+++ using TR=2 seconds for -stim_times and -nodata
+++ using NT=200 time points for -nodata
+++ -stim_times using TR=2 s for stimulus timing conversion
+++ -stim_times using TR=1 s for any -iresp output datasets
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+++ ** GUESSED ** -stim_times 1 using LOCAL times
+[7m*+ WARNING:[0m '-stim_times 1' file 'stim_times.1D' has 2 rows, but dataset has 1 time blocks
+++ Number of time points: 200 (no censoring)
+ + Number of parameters:  5 [4 baseline ; 1 signal]
+++ Wrote matrix values to file statout.xmat.1D
+++ ----- Signal+Baseline matrix condition [X] (200x5):  1.11324  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (200x1):  1  ++ VERY GOOD ++
+++ ----- Baseline-only matrix condition [X] (200x4):  1  ++ VERY GOOD ++
+++ ----- stim_base-only matrix condition [X] (200x4):  1  ++ VERY GOOD ++
+++ Wrote matrix values to file statout_XtXinv.xmat.1D
+++ +++++ Matrix inverse average error = 1.11589e-16  ++ VERY GOOD ++
+++ Matrix setup time = 0.00 s
+
+Stimulus: stim 
+  h[ 0] norm. std. dev. =   0.8508
+
+Stimulus: baseline_poly_1_1[0] 
+  h[ 0] norm. std. dev. =   1.0085
+
+Stimulus: baseline_poly_1_2[0] 
+  h[ 0] norm. std. dev. =   1.0000
+
+Stimulus: constant_1[0] 
+  h[ 0] norm. std. dev. =   0.1015
+
+Stimulus: constant_2[0] 
+  h[ 0] norm. std. dev. =   0.1000
+++ Program finished; elapsed time=0.005

@@ -1,0 +1,1 @@
+3dDeconvolve -nodata 100 2 -polort -1 -num_stimts 2 -num_glt 0 -stim_label 1 stim.A -stim_label 2 stim.B -ortvec baseline_poly_2_1.1D baseline_poly_2_1 -ortvec constant_1.1D constant_1 -stim_times 1 stim.A_times.1D SPMG1\(1\) -stim_times 2 stim.B_times.1D SPMG1\(1\) -TR_times 1 -nofullf_atall -tout -cbucket coefout -bucket statout -x1D_stop -jobs 1 -float

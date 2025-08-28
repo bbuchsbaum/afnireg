@@ -3,8 +3,8 @@
 #' The afnireg package provides an R interface to AFNI's 3dDeconvolve
 #' program for fMRI analysis.
 #'
-#' @docType package
-#' @name afnireg
+#' @keywords internal
+"_PACKAGE"
 #' @import fmridesign
 #' @import fmrihrf
 #' @import fmridataset

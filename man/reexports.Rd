@@ -23,7 +23,7 @@ below to see their documentation.
 \describe{
   \item{fmridataset}{\code{\link[fmridataset]{fmri_dataset}}}
 
-  \item{fmridesign}{\code{\link[fmridesign]{baseline_model}}, \code{\link[fmridesign]{blockids}}, \code{\link[fmridesign]{construct}}, \code{\link[fmridesign]{event_model}}, \code{\link[fmridesign]{event_table}}, \code{\link[fmridesign]{event_term}}, \code{\link[fmridesign]{split_onsets}}}
+  \item{fmridesign}{\code{\link[fmridesign]{baseline_model}}, \code{\link[fmridesign:fmrihrf-reexports]{blockids}}, \code{\link[fmridesign]{construct}}, \code{\link[fmridesign]{event_model}}, \code{\link[fmridesign]{event_table}}, \code{\link[fmridesign]{event_term}}, \code{\link[fmridesign]{split_onsets}}}
 
   \item{fmrihrf}{\code{\link[fmrihrf]{blocklens}}, \code{\link[fmrihrf]{sampling_frame}}}
 

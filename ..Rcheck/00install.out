@@ -1,0 +1,81 @@
+* installing *source* package ‘afnireg’ ...
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::Scale’ by ‘ggplot2::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::convolve’ by ‘stats::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::contrasts’ by ‘stats::contrasts’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::deriv’ by ‘stats::deriv’ when loading ‘fmrireg’
+Warning: replacing previous import ‘ggplot2::Scale’ by ‘fmridesign::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘stats::convolve’ by ‘fmridesign::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::durations’ by ‘fmridesign::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::onsets’ by ‘fmridesign::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::Scale’ by ‘ggplot2::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::convolve’ by ‘stats::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::contrasts’ by ‘stats::contrasts’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::deriv’ by ‘stats::deriv’ when loading ‘fmrireg’
+Warning: replacing previous import ‘ggplot2::Scale’ by ‘fmridesign::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘stats::convolve’ by ‘fmridesign::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::durations’ by ‘fmridesign::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::onsets’ by ‘fmridesign::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+** testing if installed package can be loaded from final location
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘afnireg’
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::Scale’ by ‘ggplot2::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::convolve’ by ‘stats::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::contrasts’ by ‘stats::contrasts’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::deriv’ by ‘stats::deriv’ when loading ‘fmrireg’
+Warning: replacing previous import ‘ggplot2::Scale’ by ‘fmridesign::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘stats::convolve’ by ‘fmridesign::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::durations’ by ‘fmridesign::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::onsets’ by ‘fmridesign::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+** testing if installed package keeps a record of temporary installation path
+* DONE (afnireg)

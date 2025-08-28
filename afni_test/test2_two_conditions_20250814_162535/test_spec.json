@@ -1,0 +1,50 @@
+{
+  "test_name": "test2_two_conditions",
+  "description": "Two stimulus conditions (A/B) with polynomial baseline",
+  "timestamp": "20250814_162535",
+  "date": "2025-08-14 16:25:35",
+  "nodata": [100, 2],
+  "model_formula": "onset ~ afni_hrf(stim, basis = \"SPMG1\")",
+  "design_summary": {
+    "n_events": 4,
+    "variables": ["stim", "onset", "run"],
+    "runs": 1
+  },
+  "model_components": {
+    "n_functional_terms": 1,
+    "functional_term_names": "stim",
+    "baseline_terms": ["drift", "block"],
+    "n_contrasts": 0
+  },
+  "afni_command": "3dDeconvolve -nodata 100 2 -polort -1 -num_stimts 2 -num_glt 0 -stim_label 1 stim.A -stim_label 2 stim.B -ortvec baseline_poly_2_1.1D baseline_poly_2_1 -ortvec constant_1.1D constant_1 -stim_times 1 stim.A_times.1D SPMG1\\(1\\) -stim_times 2 stim.B_times.1D SPMG1\\(1\\) -TR_times 1 -nofullf_atall -tout -cbucket coefout -bucket statout -x1D_stop -jobs 1 -float",
+  "n_afni_stims": 2,
+  "n_baseline_mats": 2,
+  "execution_output": ["++ waveform setup: SPMG1(dur=1)", "++ 3dDeconvolve extending num_stimts from 2 to 5 due to -ortvec", "++ 3dDeconvolve: AFNI version=AFNI_25.2.07 (Aug  6 2025) [64-bit]", "++ Authored by: B. Douglas Ward, et al.", "++ using TR=2 seconds for -stim_times and -nodata", "++ using NT=100 time points for -nodata", "++ -stim_times using TR=2 s for stimulus timing conversion", "++ -stim_times using TR=1 s for any -iresp output datasets", "++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise", "++ ** GUESSED ** -stim_times 1 using LOCAL times", "++ ** GUESSED ** -stim_times 2 using LOCAL times", "++ Number of time points: 100 (no censoring)", " + Number of parameters:  5 [3 baseline ; 2 signal]", "++ Wrote matrix values to file statout.xmat.1D", "++ ----- Signal+Baseline matrix condition [X] (100x5):  1.29162  ++ VERY GOOD ++", "++ ----- Signal-only matrix condition [X] (100x2):  1.0059  ++ VERY GOOD ++", "++ ----- Baseline-only matrix condition [X] (100x3):  1  ++ VERY GOOD ++", "++ ----- stim_base-only matrix condition [X] (100x3):  1  ++ VERY GOOD ++", "++ 3dDeconvolve exits: -x1D_stop option was invoked"],
+  "matrix_conditions": [
+    {
+      "condition": "1.29162",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1.0059",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1",
+      "quality": "VERY GOOD"
+    }
+  ],
+  "stimuli": [],
+  "files_created": "statout.xmat.1D",
+  "xmat_file": true,
+  "stat_files": "statout.xmat.1D",
+  "results": {
+    "success": true,
+    "errors": [],
+    "warnings": "All terms require external processing and don't contribute to the R design matrix. Returning empty design matrix."
+  }
+}

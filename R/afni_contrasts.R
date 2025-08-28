@@ -7,6 +7,14 @@
 # Note: The generic to_glt is defined in afni_generics.R
 
 
+#' Convert a contrast to AFNI GLT
+#'
+#' Converts a `contrast` object from fmridesign into an AFNI GLT string
+#' (or list of GLT strings for multi-column contrasts).
+#'
+#' @param x A `contrast` object
+#' @param ... Unused, for method compatibility
+#' @return A `glt` or `glt_contrast_list` object containing GLT string(s)
 #' @export
 to_glt.contrast <- function(x,...) {
   if (is.matrix(x$weights) && ncol(x$weights) > 1) {

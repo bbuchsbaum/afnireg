@@ -2,6 +2,8 @@
 #'
 #' Register AFNI HRF specifications with fmridesign when the package is loaded.
 #'
+#' @keywords internal
+#' @noRd
 
 .onLoad <- function(libname, pkgname) {
   # Check if fmridesign is available

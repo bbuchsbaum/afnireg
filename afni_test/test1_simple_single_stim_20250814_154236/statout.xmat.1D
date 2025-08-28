@@ -1,0 +1,122 @@
+# <matrix
+#  ni_type = "2*double"
+#  ni_dimen = "100"
+#  ColumnLabels = "stim#0 ; baseline_constant_1_1[0]#0"
+#  ColumnGroups = "1,0"
+#  RowTR = "2"
+#  GoodList = "0..99"
+#  NRowFull = "100"
+#  RunStart = "0"
+#  Nstim = "1"
+#  StimBots = "0"
+#  StimTops = "0"
+#  StimLabels = "stim"
+#  BasisNstim = "2"
+#  BasisOption_000001 = "-stim_times"
+#  BasisName_000001 = "stim"
+#  BasisFormula_000001 = "SPMG1(1)"
+#  BasisColumns_000001 = "0:0"
+#  CommandLine = "3dDeconvolve -nodata 100 2 -polort -1 -num_stimts 1 -num_glt 0 -stim_label 1 stim -ortvec baseline_constant_1_1.1D baseline_constant_1_1 -stim_times 1 stim_times.1D &apos;SPMG1(1)&apos; -TR_times 1 -nofullf_atall -tout -cbucket coefout -bucket statout -jobs 1 -float"
+# >
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0.092008821666241 1
+ 0.75264292955399 1
+ 0.97832232713699 1
+ 0.62373852729797 1
+ 0.25385808944702 1
+ 0.038437120616436 1
+ -0.060379713773727 1
+ -0.088992193341255 1
+ -0.079229392111301 1
+ -0.05536962673068 1
+ -0.032648477703333 1
+ -0.016840353608131 1
+ -9.3763068434782e-05 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+ 0 1
+# </matrix>
+

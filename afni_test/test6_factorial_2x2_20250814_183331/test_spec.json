@@ -1,0 +1,50 @@
+{
+  "test_name": "test6_factorial_2x2",
+  "description": "2x2 factorial design (Fac1: aa/bb, Fac2: cc/dd) with 3 runs and all pairwise contrasts",
+  "timestamp": "20250814_183331",
+  "date": "2025-08-14 18:33:31",
+  "nodata": [300, 2],
+  "model_formula": "onset ~ afni_hrf(Fac1, Fac2, basis = \"SPMG1\", contrasts = all_contrasts)",
+  "design_summary": {
+    "n_events": 48,
+    "variables": ["Fac1", "Fac2", "rep", "run", "onset"],
+    "runs": [1, 2, 3]
+  },
+  "model_components": {
+    "n_functional_terms": 1,
+    "functional_term_names": "Fac1_Fac2",
+    "baseline_terms": ["drift", "block"],
+    "n_contrasts": 0
+  },
+  "afni_command": "3dDeconvolve -nodata 300 2 -polort -1 -num_stimts 4 -num_glt 0 -stim_label 1 Fac1.aa_Fac2.cc -stim_label 2 Fac1.bb_Fac2.cc -stim_label 3 Fac1.aa_Fac2.dd -stim_label 4 Fac1.bb_Fac2.dd -ortvec baseline_poly_2_1.1D baseline_poly_2_1 -ortvec baseline_poly_2_2.1D baseline_poly_2_2 -ortvec baseline_poly_2_3.1D baseline_poly_2_3 -ortvec constant_1.1D constant_1 -ortvec constant_2.1D constant_2 -ortvec constant_3.1D constant_3 -stim_times 1 Fac1.aa_Fac2.cc_times.1D SPMG1\\(1\\) -stim_times 2 Fac1.bb_Fac2.cc_times.1D SPMG1\\(1\\) -stim_times 3 Fac1.aa_Fac2.dd_times.1D SPMG1\\(1\\) -stim_times 4 Fac1.bb_Fac2.dd_times.1D SPMG1\\(1\\) -TR_times 1 -nofullf_atall -tout -cbucket coefout -bucket statout -x1D_stop -jobs 1 -float",
+  "n_afni_stims": 4,
+  "n_baseline_mats": 6,
+  "execution_output": ["++ waveform setup: SPMG1(dur=1)", "++ 3dDeconvolve extending num_stimts from 4 to 13 due to -ortvec", "++ 3dDeconvolve: AFNI version=AFNI_25.2.07 (Aug  6 2025) [64-bit]", "++ Authored by: B. Douglas Ward, et al.", "++ using TR=2 seconds for -stim_times and -nodata", "++ using NT=300 time points for -nodata", "++ -stim_times using TR=2 s for stimulus timing conversion", "++ -stim_times using TR=1 s for any -iresp output datasets", "++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise", "++ ** GUESSED ** -stim_times 1 using LOCAL times", "\u001b[7m*+ WARNING:\u001b[0m '-stim_times 1' file 'Fac1.aa_Fac2.cc_times.1D' has 3 rows, but dataset has 1 time blocks", "++ ** GUESSED ** -stim_times 2 using LOCAL times", "\u001b[7m*+ WARNING:\u001b[0m '-stim_times 2' file 'Fac1.bb_Fac2.cc_times.1D' has 3 rows, but dataset has 1 time blocks", "++ ** GUESSED ** -stim_times 3 using LOCAL times", "\u001b[7m*+ WARNING:\u001b[0m '-stim_times 3' file 'Fac1.aa_Fac2.dd_times.1D' has 3 rows, but dataset has 1 time blocks", "++ ** GUESSED ** -stim_times 4 using LOCAL times", "\u001b[7m*+ WARNING:\u001b[0m '-stim_times 4' file 'Fac1.bb_Fac2.dd_times.1D' has 3 rows, but dataset has 1 time blocks", "++ Number of time points: 300 (no censoring)", " + Number of parameters:  13 [9 baseline ; 4 signal]", "++ Wrote matrix values to file statout.xmat.1D", "++ ----- Signal+Baseline matrix condition [X] (300x13):  1.61925  ++ VERY GOOD ++", "++ ----- Signal-only matrix condition [X] (300x4):  1.08777  ++ VERY GOOD ++", "++ ----- Baseline-only matrix condition [X] (300x9):  1  ++ VERY GOOD ++", "++ ----- stim_base-only matrix condition [X] (300x9):  1  ++ VERY GOOD ++", "++ 3dDeconvolve exits: -x1D_stop option was invoked"],
+  "matrix_conditions": [
+    {
+      "condition": "1.61925",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1.08777",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1",
+      "quality": "VERY GOOD"
+    },
+    {
+      "condition": "1",
+      "quality": "VERY GOOD"
+    }
+  ],
+  "stimuli": [],
+  "files_created": ["3dDeconvolve.err", "statout.xmat.1D"],
+  "xmat_file": true,
+  "stat_files": "statout.xmat.1D",
+  "results": {
+    "success": true,
+    "errors": [],
+    "warnings": "All terms require external processing and don't contribute to the R design matrix. Returning empty design matrix."
+  }
+}

@@ -3,7 +3,8 @@
 #' This file contains functions for building 3dDeconvolve command strings
 #' and managing all the components needed for AFNI command execution.
 #'
-#' @importFrom fmridesign contrast_weights terms blockids
+#' @importFrom fmridesign contrast_weights blockids
+#' @importFrom stats terms
 #' @importFrom assertthat assert_that
 
 #' Generate 3dDeconvolve command string

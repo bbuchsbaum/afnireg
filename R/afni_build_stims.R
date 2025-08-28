@@ -27,7 +27,7 @@ build_baseline_stims <- function(x) {
 
 # Note: The generic build_afni_stims is defined in afni_generics.R
 
-#' @keywords internal
+#' @rdname build_afni_stims
 #' @export
 #' @importFrom fmridesign design_matrix longnames
 build_afni_stims.convolved_term <- function(x, iresp=FALSE, tr_times=1) {
@@ -56,7 +56,7 @@ build_afni_stims.convolved_term <- function(x, iresp=FALSE, tr_times=1) {
   })
 }
 
-#' @keywords internal
+#' @rdname build_afni_stims
 #' @export
 build_afni_stims.afni_hrf_convolved_term <- function(x, iresp=FALSE, tr_times=1) {
 
@@ -148,7 +148,7 @@ build_afni_stims.afni_hrf_convolved_term <- function(x, iresp=FALSE, tr_times=1)
   
 }
 
-#' @keywords internal
+#' @rdname build_afni_stims
 #' @export
 build_afni_stims.afni_trialwise_convolved_term <- function(x, iresp=FALSE, tr_times=1) {
   eterm <- x$evterm
@@ -192,7 +192,7 @@ build_afni_stims.afni_trialwise_convolved_term <- function(x, iresp=FALSE, tr_ti
   ))
 }
 
-#' @keywords internal
+#' @rdname build_afni_stims
 #' @export
 #' @importFrom fmridesign split_onsets
 build_afni_stims.event_term <- function(x, iresp=FALSE, tr_times=1,...) {

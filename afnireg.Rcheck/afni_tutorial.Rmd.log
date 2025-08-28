@@ -1,0 +1,64 @@
+Error in eval(x, envir = envir) : object 'afni_available' not found
+Error in eval(x, envir = envir) : object 'afni_available' not found
+
+> knitr::opts_chunk$set(collapse = TRUE, comment = "#>", 
++     fig.width = 7, fig.height = 5, message = FALSE, warning = FALSE, 
++     error = TRUE)
+
+> library(tibble)
+Warning: package ‘tibble’ was built under R version 4.3.3
+
+> library(fmrireg)
+Warning: replacing previous import ‘fmridataset::blocklens’ by ‘fmridesign::blocklens’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::samples’ by ‘fmridesign::samples’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridataset::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::onsets’ by ‘fmrihrf::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::durations’ by ‘fmrihrf::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::Scale’ by ‘ggplot2::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::convolve’ by ‘stats::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::contrasts’ by ‘stats::contrasts’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::deriv’ by ‘stats::deriv’ when loading ‘fmrireg’
+Warning: replacing previous import ‘ggplot2::Scale’ by ‘fmridesign::Scale’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::blockids’ by ‘fmridesign::blockids’ when loading ‘fmrireg’
+Warning: replacing previous import ‘stats::convolve’ by ‘fmridesign::convolve’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::durations’ by ‘fmridesign::durations’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmrihrf::onsets’ by ‘fmridesign::onsets’ when loading ‘fmrireg’
+Warning: replacing previous import ‘fmridesign::blockids’ by ‘fmrihrf::blockids’ when loading ‘fmrireg’
+
+Attaching package: ‘fmrireg’
+
+The following object is masked from ‘package:stats’:
+
+    convolve
+
+
+> afni_available <- FALSE
+
+> TR <- 2
+
+> cond <- c("face", "scene", "tool", "object")
+
+> NSTIM <- length(cond) * 4
+
+> set.seed(123)
+
+> simple_design <- data.frame(stim = factor(sample(rep(cond, 
++     4))), ISI = sample(10:20, NSTIM, replace = TRUE), run = rep(1, 
++     NSTIM), tria .... [TRUNCATED] 
+
+> simple_design$onset <- cumsum(c(0, simple_design$ISI[-NSTIM] + 
++     2))
+
+> sframe <- sampling_frame(blocklens = 140, TR = TR)
+
+> con1 <- pair_contrast(~stim == "face", ~stim == "scene", 
++     name = "face_scene")
+
+> emodel <- event_model(onset ~ hrf(stim, contrasts = con1), 
++     data = simple_design, block = ~run, sampling_frame = sframe)
+
+  When sourcing ‘afni_tutorial.R’:
+Error: Failed to evaluate term 'hrf(stim, contrasts = con1)': If `contrasts=` is a list, all elements must be contrast_spec objects.
+  Hint: Use functions like contrast(), pair_contrast(), contrast_set() to define contrasts.
+Execution halted

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Bradley R. Buchsbaum" />
+
+<meta name="date" content="2025-08-16" />
+
+<title>Translating to AFNI 3dDeconvolve</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Translating to AFNI 3dDeconvolve</h1>
+<h4 class="author">Bradley R. Buchsbaum</h4>
+<h4 class="date">2025-08-16</h4>
+
+
+
+<div id="introduction-generating-afni-models-with-fmrireg" class="section level2">
+<h2>Introduction: Generating AFNI Models with <code>fmrireg</code></h2>
+<p>While <code>fmrireg</code> provides tools for fitting fMRI models
+directly in R (see <code>fmri_lm</code>), you might prefer to leverage
+the robust and efficient estimation methods available in other popular
+fMRI analysis packages like AFNI.</p>
+<p>This vignette demonstrates how to construct a full fMRI regression
+model within <code>fmrireg</code> and then translate it into the syntax
+and associated files required for AFNI’s <code>3dDeconvolve</code>
+program. This allows you to use <code>fmrireg</code>’s flexible formula
+interface and HRF specification tools while utilizing AFNI for the final
+voxelwise model estimation.</p>
+<p>The primary function for this translation is
+<code>afni_lm()</code>.</p>
+</div>
+<div id="a-simple-model-example" class="section level2">
+<h2>A Simple Model Example</h2>
+<p>Let’s start with the simple single-run, single-factor design from the
+“Building Event Models” vignette.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>TR <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>cond <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;face&quot;</span>, <span class="st">&quot;scene&quot;</span>, <span class="st">&quot;tool&quot;</span>, <span class="st">&quot;object&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>NSTIM <span class="ot">&lt;-</span> <span class="fu">length</span>(cond) <span class="sc">*</span> <span class="dv">4</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>simple_design <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">stim =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">rep</span>(cond, <span class="dv">4</span>))),</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">ISI =</span> <span class="fu">sample</span>(<span class="dv">10</span><span class="sc">:</span><span class="dv">20</span>, NSTIM, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="co"># Using wider ISI from previous fixes</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">run =</span> <span class="fu">rep</span>(<span class="dv">1</span>, NSTIM),</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">trial =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span>NSTIM)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>simple_design<span class="sc">$</span>onset <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">c</span>(<span class="dv">0</span>, simple_design<span class="sc">$</span>ISI[<span class="sc">-</span>NSTIM] <span class="sc">+</span> <span class="dv">2</span>))</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>sframe <span class="ot">&lt;-</span> <span class="fu">sampling_frame</span>(<span class="at">blocklens =</span> <span class="dv">140</span>, <span class="at">TR =</span> TR)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># Define a contrast</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>con1 <span class="ot">&lt;-</span> <span class="fu">pair_contrast</span>(<span class="sc">~</span> stim <span class="sc">==</span> <span class="st">&quot;face&quot;</span>, <span class="sc">~</span>stim <span class="sc">==</span> <span class="st">&quot;scene&quot;</span>, <span class="at">name =</span> <span class="st">&quot;face_scene&quot;</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co"># Create the event model</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>emodel <span class="ot">&lt;-</span> <span class="fu">event_model</span>(onset <span class="sc">~</span> <span class="fu">hrf</span>(stim, <span class="at">contrasts =</span> con1), </span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>                     <span class="at">data =</span> simple_design, </span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>                     <span class="at">block =</span> <span class="sc">~</span> run, </span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>                     <span class="at">sampling_frame =</span> sframe)</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; Error: Failed to evaluate term &#39;hrf(stim, contrasts = con1)&#39;: If `contrasts=` is a list, all elements must be contrast_spec objects.</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt;   Hint: Use functions like contrast(), pair_contrast(), contrast_set() to define contrasts.</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co"># Create the baseline model (B-spline drift)</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>bmodel <span class="ot">&lt;-</span> <span class="fu">baseline_model</span>(<span class="at">basis =</span> <span class="st">&quot;bs&quot;</span>, <span class="at">degree =</span> <span class="dv">5</span>, <span class="at">sframe =</span> sframe)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co"># Combine into a full fmri_model</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>fmodel <span class="ot">&lt;-</span> <span class="fu">fmri_model</span>(emodel, bmodel)</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt; Error: object &#39;emodel&#39; not found</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co"># Define the dataset (using placeholder file names)</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>dset <span class="ot">&lt;-</span> <span class="fu">fmri_dataset</span>(<span class="at">scans =</span> <span class="st">&quot;scan01.nii.gz&quot;</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>                     <span class="at">mask =</span> <span class="st">&quot;mask.nii.gz&quot;</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>                     <span class="at">TR =</span> TR,</span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a>                     <span class="at">run_length =</span> <span class="dv">140</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>                     <span class="at">event_table =</span> simple_design,</span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a>                     <span class="at">base_path =</span> <span class="st">&quot;.&quot;</span>) <span class="co"># Assuming files are in the working directory</span></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co">#&gt; Error in tryCatchOne(expr, names, parentenv, handlers[[1L]]): Failed to create backend &#39;nifti&#39;: Source files not found: ./scan01.nii.gz</span></span></code></pre></div>
+</div>
+<div id="translating-the-model-with-afni_lm" class="section level2">
+<h2>Translating the Model with <code>afni_lm</code></h2>
+<p>The <code>afni_lm()</code> function takes the <code>fmri_model</code>
+and <code>fmri_dataset</code> objects and generates an AFNI model
+specification.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>alm_spec <span class="ot">&lt;-</span> <span class="fu">afni_lm</span>(fmodel, dset)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; Error in afni_lm(fmodel, dset): could not find function &quot;afni_lm&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">print</span>(alm_spec)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; Error: object &#39;alm_spec&#39; not found</span></span></code></pre></div>
+<p>This creates an <code>afni_lm_spec</code> object which contains:</p>
+<ul>
+<li>The original <code>fmri_model</code> and
+<code>fmri_dataset</code>.</li>
+<li>The generated <code>3dDeconvolve</code> command string
+(<code>alm_spec$cmd$cmd</code>).</li>
+<li>Parsed command line arguments
+(<code>alm_spec$cmd$cmdlines</code>).</li>
+<li>Information about stimulus timing files, GLTs, etc.</li>
+</ul>
+<p><strong>Key Translations:</strong></p>
+<ul>
+<li><strong>HRF Convolution:</strong> <code>fmrireg</code> performs the
+HRF convolution specified in <code>event_model</code> (e.g.,
+<code>hrf(stim)</code> uses <code>HRF_SPMG1</code>) and passes the
+resulting regressors to <code>3dDeconvolve</code> via
+<code>-stim_file</code> arguments. Each condition level gets its own
+stimulus file (e.g., <code>stim[face]_reg.1D</code>).</li>
+<li><strong>Baseline Model:</strong> Regressors from the
+<code>baseline_model</code> (here, the B-spline basis columns) are
+included as nuisance regressors via the <code>-ortvec</code>
+argument.</li>
+<li><strong>Contrasts:</strong> <code>fmrireg</code> contrasts (like
+<code>con1</code> defined with <code>pair_contrast</code>) are
+automatically converted into AFNI-style general linear tests (GLTs)
+using the <code>-gltsym</code> and <code>-glt_label</code> arguments. A
+separate text file is generated for each GLT (e.g.,
+<code>GLT_face_scene.txt</code>).</li>
+</ul>
+</div>
+<div id="handling-afnis--polort" class="section level2">
+<h2>Handling AFNI’s <code>-polort</code></h2>
+<p>By default, <code>afni_lm</code> sets <code>polort = -1</code> in the
+<code>3dDeconvolve</code> command. This disables AFNI’s built-in
+polynomial baseline drift modeling. This is the desired behavior when
+you provide your own drift regressors via <code>fmrireg</code>’s
+<code>baseline_model</code> (like our B-spline model
+<code>bmodel</code>), as including both would lead to redundant and
+collinear regressors.</p>
+<p>If you <em>didn’t</em> include drift terms in your
+<code>baseline_model</code> and wanted to use AFNI’s polynomial drift
+correction, you could specify <code>polort</code> in the
+<code>afni_lm</code> call:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Example: No drift in bmodel, use AFNI polort</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>bmodel_no_drift <span class="ot">&lt;-</span> <span class="fu">baseline_model</span>(<span class="at">basis =</span> <span class="st">&quot;constant&quot;</span>, <span class="at">sframe =</span> sframe) <span class="co"># Only intercept</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>fmodel_no_drift <span class="ot">&lt;-</span> <span class="fu">fmri_model</span>(emodel, bmodel_no_drift)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># Specify polort=2 for quadratic drift</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>alm_spec_polort <span class="ot">&lt;-</span> <span class="fu">afni_lm</span>(fmodel_no_drift, dset, <span class="at">polort =</span> <span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">print</span>(alm_spec_polort)</span></code></pre></div>
+<p>However, explicitly defining drift terms in <code>fmrireg</code>’s
+<code>baseline_model</code> is generally recommended for
+consistency.</p>
+</div>
+<div id="passing-custom-3ddeconvolve-options" class="section level2">
+<h2>Passing Custom <code>3dDeconvolve</code> Options</h2>
+<p>You can pass additional options directly to the
+<code>3dDeconvolve</code> command using the <code>options</code>
+argument in <code>afni_lm</code>. This accepts a list where element
+names correspond to <code>3dDeconvolve</code> flags (without the leading
+<code>-</code>) and values are the arguments for those flags.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Example: Request statistic and coefficient buckets, disable t-stat output</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>alm_spec_opts <span class="ot">&lt;-</span> <span class="fu">afni_lm</span>(fmodel, dset, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                         <span class="at">options =</span> <span class="fu">list</span>(<span class="at">bucket =</span> <span class="st">&quot;stats_afni&quot;</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                                        <span class="at">cbucket =</span> <span class="st">&quot;coefs_afni&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                                        <span class="at">tout =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Error in afni_lm(fmodel, dset, options = list(bucket = &quot;stats_afni&quot;, cbucket = &quot;coefs_afni&quot;, : could not find function &quot;afni_lm&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">print</span>(alm_spec_opts)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Error: object &#39;alm_spec_opts&#39; not found</span></span></code></pre></div>
+</div>
+<div id="using-afni-native-hrf-basis-functions" class="section level2">
+<h2>Using AFNI-Native HRF Basis Functions</h2>
+<p>A powerful feature is the ability to specify basis functions within
+<code>event_model</code> that directly map to AFNI’s built-in HRF models
+(like <code>BLOCK</code>, <code>TENT</code>, <code>SPMG1</code>, etc.).
+This avoids pre-convolution in R and lets <code>3dDeconvolve</code>
+handle the HRF modeling using its optimized routines.</p>
+<p>Use the <code>afni_hrf()</code> specifier within the
+<code>event_model</code> formula instead of <code>hrf()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Example using AFNI&#39;s BLOCK function for convolution</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Note: Using afni_hrf requires AFNI to be installed for 3dDeconvolve to run</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>emodel_afni_block <span class="ot">&lt;-</span> <span class="fu">event_model</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  onset <span class="sc">~</span> <span class="fu">afni_hrf</span>(stim, <span class="at">basis =</span> <span class="st">&quot;BLOCK(2,1)&quot;</span>), <span class="co"># BLOCK(duration, penalty)</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">data =</span> simple_design, </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">block =</span> <span class="sc">~</span> run, </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">sampling_frame =</span> sframe</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>fmodel_afni <span class="ot">&lt;-</span> <span class="fu">fmri_model</span>(emodel_afni_block, bmodel)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>alm_spec_afni_native <span class="ot">&lt;-</span> <span class="fu">afni_lm</span>(fmodel_afni, dset)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="fu">print</span>(alm_spec_afni_native)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co"># Check the command: It should now use -stim_times instead of -stim_file</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co"># and specify &#39;BLOCK(2,1)&#39; as the basis function.</span></span></code></pre></div>
+<pre><code>#&gt; Skipping AFNI-native HRF example as AFNI availability check is FALSE.</code></pre>
+<p>Refer to the <code>afni_hrf()</code> documentation and the
+<code>3dDeconvolve</code> help for details on available AFNI basis
+functions and their parameters.</p>
+</div>
+<div id="handling-nuisance-regressors-and-censoring" class="section level2">
+<h2>Handling Nuisance Regressors and Censoring</h2>
+<ul>
+<li><strong>Nuisance Regressors:</strong> If your
+<code>baseline_model</code> includes nuisance regressors loaded from
+files (e.g., motion parameters), <code>afni_lm</code> will include them
+via the <code>-ortvec</code> argument, similar to how drift terms are
+handled.</li>
+<li><strong>Censoring:</strong> You can provide a censoring vector (or
+list of vectors per run) to the <code>censor</code> argument of
+<code>afni_lm</code>. This will generate a <code>censor.1D</code> file
+and add the <code>-censor censor.1D</code> option to the
+<code>3dDeconvolve</code> command.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Example: Censor the first 5 scans</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>censor_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">140</span>) <span class="co"># Start with all scans included (1)</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>censor_vec[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">0</span>       <span class="co"># Censor first 5 scans (0)</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>alm_spec_censored <span class="ot">&lt;-</span> <span class="fu">afni_lm</span>(fmodel, dset, <span class="at">censor =</span> censor_vec)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Error in afni_lm(fmodel, dset, censor = censor_vec): could not find function &quot;afni_lm&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">print</span>(alm_spec_censored)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Error: object &#39;alm_spec_censored&#39; not found</span></span></code></pre></div>
+</div>
+<div id="generating-files-and-running-the-model" class="section level2">
+<h2>Generating Files and Running the Model</h2>
+<p>Once you have the <code>afni_lm_spec</code> object, you can generate
+the necessary files and optionally execute the <code>3dDeconvolve</code>
+command using the <code>run()</code> method.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># This command will:</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># 1. Create the output directory &#39;glm_afni_output&#39;.</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># 2. Change into that directory.</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># 3. Write all necessary files:</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#    - Stimulus files (.1D) for each regressor if using standard hrf()</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#    - Stimulus timing files (.1D) if using afni_hrf()</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#    - Nuisance regressor files (.1D)</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#    - GLT files (.txt)</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#    - Censor file (censor.1D) if specified</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#    - The 3ddeconvolve.sh script containing the full command</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co"># 4. Execute the 3ddeconvolve.sh script.</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co"># 5. Change back to the original directory.</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="fu">run</span>(alm_spec_opts, <span class="at">outdir =</span> <span class="st">&quot;glm_afni_output&quot;</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co"># To only generate the script and files without running:</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co"># run(alm_spec_opts, outdir = &quot;glm_afni_output&quot;, execute = FALSE)</span></span></code></pre></div>
+<p>This workflow allows you to define complex models in R using
+<code>fmrireg</code> and then leverage AFNI’s <code>3dDeconvolve</code>
+for efficient estimation.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -228,37 +228,68 @@ afni_trialwise <- function(label, basis=c("spmg1", "block", "dmblock", "gamma", 
 }
 
 
-# AFNI HRF Constructor Functions
+## AFNI HRF Constructor Functions
+#'
+#' AFNI-native HRF basis constructors. These functions create `AFNI_HRF`
+#' objects corresponding to AFNI’s built-in basis families.
+#'
+#' @section Constructors:
+#' - `AFNI_SPMG1(d=1)` – SPMG1 (canonical), duration `d` seconds
+#' - `AFNI_SPMG2(d=1)` – SPMG2, duration `d`
+#' - `AFNI_SPMG3(d=1)` – SPMG3, duration `d`
+#' - `AFNI_BLOCK(d=1, p=1)` – BLOCK, duration `d`, penalty `p`
+#' - `AFNI_dmBLOCK(d=1, p=1)` – dmBLOCK, duration `d`, penalty `p`
+#' - `AFNI_TENT(b=0, c=18, n=10)` – TENT from `b` to `c` with `n` knots
+#' - `AFNI_CSPLIN(b=0, c=18, n=6)` – CSPLIN from `b` to `c` with `n` splines
+#' - `AFNI_POLY(b=0, c=18, n=10)` – POLY from `b` to `c` with `n` degrees
+#' - `AFNI_SIN(b=0, c=18, n=10)` – SIN from `b` to `c` with `n` harmonics
+#' - `AFNI_GAM(p=8.6, q=.547)` – GAM with AFNI default parameters
+#' - `AFNI_WAV(d=1)` – WAV (duration parameter)
+#'
+#' @name AFNI_HRF_constructors
+NULL
+
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_SPMG1 <- function(d=1) AFNI_HRF(name="SPMG1", nbasis=as.integer(1), params=list(d=d)) 
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_SPMG2 <- function(d=1) AFNI_HRF(name="SPMG2", nbasis=as.integer(2), params=list(d=d))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_SPMG3 <- function(d=1) AFNI_HRF(name="SPMG3", nbasis=as.integer(3), params=list(d=d))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_BLOCK <- function(d=1,p=1) AFNI_HRF(name="BLOCK", nbasis=as.integer(1), params=list(d=d,p=p))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_dmBLOCK <- function(d=1,p=1) AFNI_HRF(name="dmBLOCK", nbasis=as.integer(1), params=list(d=d,p=p))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_TENT <- function(b=0,c=18, n=10) AFNI_HRF(name="TENT", nbasis=as.integer(n), params=list(b=b,c=c,n=n))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_CSPLIN <- function(b=0,c=18, n=6) AFNI_HRF(name="CSPLIN", nbasis=as.integer(n), params=list(b=b,c=c,n=n))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_POLY <- function(b=0,c=18, n=10) AFNI_HRF(name="POLY", nbasis=as.integer(n), params=list(b=b,c=c,n=n))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_SIN <- function(b=0,c=18, n=10) AFNI_HRF(name="SIN", nbasis=as.integer(n), params=list(b=b,c=c,n=n))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_GAM <- function(p=8.6,q=.547) AFNI_HRF(name="GAM", nbasis=as.integer(1), params=list(p=p,q=q))
 
+#' @rdname AFNI_HRF_constructors
 #' @export
 AFNI_WAV <- function(d=1) AFNI_HRF(name="WAV", nbasis=as.integer(1), params=list(d=1))
 

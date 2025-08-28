@@ -112,8 +112,17 @@ afni_lm <- function(fmri_mod, dataset, working_dir=".", polort=-1, jobs=1,
                          nofullf_atall, ...)
 }
 
-#' afni_lm_spec constructor
-#' 
+#' Construct an afni_lm_spec object
+#'
+#' Creates an `afni_lm_spec` object bundling the model, dataset, options,
+#' working directory, and generated 3dDeconvolve command.
+#'
+#' @param model An `fmri_model` used to generate the AFNI command
+#' @param dataset An `fmri_dataset` or NULL if using `nodata`
+#' @param working_dir Character path used when generating files
+#' @param options A named list of options passed to command generation
+#' @param cmd A list with `cmd` (string) and other command metadata
+#' @return An object of class `afni_lm_spec`
 #' @export
 afni_lm_spec <- function(model, dataset, working_dir, options, cmd) {
   structure(

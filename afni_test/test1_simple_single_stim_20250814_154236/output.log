@@ -1,0 +1,27 @@
+++ waveform setup: SPMG1(dur=1)
+++ 3dDeconvolve extending num_stimts from 1 to 2 due to -ortvec
+++ 3dDeconvolve: AFNI version=AFNI_25.2.07 (Aug  6 2025) [64-bit]
+++ Authored by: B. Douglas Ward, et al.
+++ using TR=2 seconds for -stim_times and -nodata
+++ using NT=100 time points for -nodata
+++ -stim_times using TR=2 s for stimulus timing conversion
+++ -stim_times using TR=1 s for any -iresp output datasets
+++ ** -stim_times NOTE ** guessing GLOBAL times if 1 time per line; LOCAL otherwise
+++ ** GUESSED ** -stim_times 1 using GLOBAL times
+++ Number of time points: 100 (no censoring)
+ + Number of parameters:  2 [1 baseline ; 1 signal]
+++ Wrote matrix values to file statout.xmat.1D
+++ ----- Signal+Baseline matrix condition [X] (100x2):  1.08946  ++ VERY GOOD ++
+++ ----- Signal-only matrix condition [X] (100x1):  1  ++ VERY GOOD ++
+++ ----- Baseline-only matrix condition [X] (100x1):  1  ++ VERY GOOD ++
+++ ----- stim_base-only matrix condition [X] (100x1):  1  ++ VERY GOOD ++
+++ Wrote matrix values to file statout_XtXinv.xmat.1D
+++ +++++ Matrix inverse average error = 4.44837e-16  ++ VERY GOOD ++
+++ Matrix setup time = 0.00 s
+
+Stimulus: stim 
+  h[ 0] norm. std. dev. =   0.7159
+
+Stimulus: baseline_constant_1_1[0] 
+  h[ 0] norm. std. dev. =   0.1015
+++ Program finished; elapsed time=0.011

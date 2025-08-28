@@ -1,0 +1,24 @@
+#' AFNI Integration for fMRI Analysis
+#'
+#' This file serves as the main entry point for AFNI integration functionality.
+#' The implementation has been modularized into the following files:
+#' 
+#' @section Files:
+#' \itemize{
+#'   \item \code{afni_hrf_specs.R} - HRF specifications and constructors
+#'   \item \code{afni_stim_files.R} - Stimulus file creation and management
+#'   \item \code{afni_build_stims.R} - Building AFNI stimulus objects
+#'   \item \code{afni_command_generation.R} - 3dDeconvolve command generation
+#'   \item \code{afni_contrasts.R} - Contrast and GLT handling
+#'   \item \code{afni_construct.R} - Construct methods for AFNI terms
+#'   \item \code{afni_s3_methods.R} - S3 methods for AFNI term classes
+#'   \item \code{afni_lm.R} - Linear model interface functions
+#' }
+#'
+#' @keywords internal
+#' @name afni-package
+NULL
+
+# Note: All AFNI functionality has been refactored into separate files
+# for better organization and maintainability. The functions are
+# automatically loaded by R's package loading mechanism.
