@@ -91,19 +91,46 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bbuchsbaum/afnireg" class="external-link">afnireg</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bbuchsbaum/fmridesign" class="external-link">fmridesign</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bbuchsbaum.github.io/fmrihrf/" class="external-link">fmrihrf</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create an AFNI HRF specification</span></span>
-<span><span class="va">hrf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/afni_hrf.html">afni_hrf</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"SPMG1"</span><span class="op">)</span></span>
+<span><span class="co"># 1) Specify an event and baseline model in R</span></span>
+<span><span class="va">TR</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">sframe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrihrf/reference/sampling_frame.html" class="external-link">sampling_frame</a></span><span class="op">(</span>blocklens <span class="op">=</span> <span class="fl">140</span>, TR <span class="op">=</span> <span class="va">TR</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Build a model for AFNI</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/afni_lm.html">afni_lm</a></span><span class="op">(</span></span>
-<span>  dataset <span class="op">=</span> <span class="va">my_data</span>,</span>
-<span>  event_model <span class="op">=</span> <span class="va">my_events</span>,</span>
-<span>  hrf_spec <span class="op">=</span> <span class="va">hrf_spec</span></span>
+<span><span class="va">emodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">onset</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/hrf.html" class="external-link">hrf</a></span><span class="op">(</span><span class="va">stim</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">events_df</span>,       <span class="co"># data.frame with columns: onset, stim, run, ...</span></span>
+<span>  block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>,</span>
+<span>  sampling_frame <span class="op">=</span> <span class="va">sframe</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run the model in AFNI</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run.html">run</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">bmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/baseline_model.html" class="external-link">baseline_model</a></span><span class="op">(</span>basis <span class="op">=</span> <span class="st">"bs"</span>, degree <span class="op">=</span> <span class="fl">5</span>, sframe <span class="op">=</span> <span class="va">sframe</span><span class="op">)</span></span>
+<span><span class="va">fmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrireg/reference/fmri_model.html" class="external-link">fmri_model</a></span><span class="op">(</span><span class="va">emodel</span>, <span class="va">bmodel</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 2a) With scans: build an AFNI spec</span></span>
+<span><span class="va">dset</span> <span class="op">&lt;-</span> <span class="fu">fmridataset</span><span class="fu">::</span><span class="fu"><a href="https://bbuchsbaum.github.io/fmridataset/reference/fmri_dataset.html" class="external-link">fmri_dataset</a></span><span class="op">(</span></span>
+<span>  scans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"run1.nii.gz"</span>, <span class="st">"run2.nii.gz"</span><span class="op">)</span>,</span>
+<span>  mask  <span class="op">=</span> <span class="st">"mask.nii.gz"</span>,</span>
+<span>  TR    <span class="op">=</span> <span class="va">TR</span>,</span>
+<span>  run_length <span class="op">=</span> <span class="fl">140</span>,</span>
+<span>  event_table <span class="op">=</span> <span class="va">events_df</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">alm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, <span class="va">dset</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bucket <span class="op">=</span> <span class="st">"stats_afni"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/run.html">run</a></span><span class="op">(</span><span class="va">alm</span>, outdir <span class="op">=</span> <span class="st">"glm_afni_output"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 2b) Or do a dry run without data (writes .xmat.1D and script)</span></span>
+<span><span class="va">alm_nodata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel</span>, dataset <span class="op">=</span> <span class="cn">NULL</span>, nodata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="va">TR</span><span class="op">)</span>, x1D_stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/run.html">run</a></span><span class="op">(</span><span class="va">alm_nodata</span>, outdir <span class="op">=</span> <span class="st">"glm_afni_x1d"</span>, execute <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># AFNI-native HRF example (uses -stim_times)</span></span>
+<span><span class="va">emodel_afni</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">onset</span> <span class="op">~</span> <span class="fu"><a href="reference/afni_hrf.html">afni_hrf</a></span><span class="op">(</span><span class="va">stim</span>, basis <span class="op">=</span> <span class="st">"block"</span>, durations <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">events_df</span>, block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>, sampling_frame <span class="op">=</span> <span class="va">sframe</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fmodel_afni</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrireg/reference/fmri_model.html" class="external-link">fmri_model</a></span><span class="op">(</span><span class="va">emodel_afni</span>, <span class="va">bmodel</span><span class="op">)</span></span>
+<span><span class="va">alm_afni</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel_afni</span>, <span class="va">dset</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
