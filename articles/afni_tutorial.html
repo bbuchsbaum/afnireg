@@ -54,7 +54,7 @@
                         <h4 data-toc-skip class="author">Bradley R.
 Buchsbaum</h4>
             
-            <h4 data-toc-skip class="date">2025-08-18</h4>
+            <h4 data-toc-skip class="date">2025-08-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bbuchsbaum/afnireg/blob/main/vignettes/afni_tutorial.Rmd" class="external-link"><code>vignettes/afni_tutorial.Rmd</code></a></small>
       <div class="d-none name"><code>afni_tutorial.Rmd</code></div>
@@ -76,6 +76,18 @@ you to use R’s flexible formula interface and HRF specification tools
 while utilizing AFNI for the final voxelwise model estimation.</p>
 <p>The primary function for this translation is
 <code><a href="../reference/afni_lm.html">afni_lm()</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
+</h2>
+<ul>
+<li>AFNI installed and <code>3dDeconvolve</code> available on your
+<code>PATH</code>.</li>
+<li>Model specification via <code>fmridesign</code> (event + baseline
+models).</li>
+<li>Optional: An <code>fmri_dataset</code> with input scans and mask, or
+use <code>nodata</code> for a dry run.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="a-simple-model-example">A Simple Model Example<a class="anchor" aria-label="anchor" href="#a-simple-model-example"></a>
@@ -219,12 +231,12 @@ handle the HRF modeling using its optimized routines.</p>
 <p>Use the <code><a href="../reference/afni_hrf.html">afni_hrf()</a></code> specifier within the
 <code>event_model</code> formula instead of <code>hrf()</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example using AFNI's BLOCK function for convolution</span></span>
+<code class="sourceCode R"><span><span class="co"># Example using AFNI's BLOCK basis (duration=2, penalty defaults to 1)</span></span>
 <span><span class="co"># Note: Using afni_hrf requires AFNI to be installed for 3dDeconvolve to run</span></span>
 <span><span class="va">emodel_afni_block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">onset</span> <span class="op">~</span> <span class="fu"><a href="../reference/afni_hrf.html">afni_hrf</a></span><span class="op">(</span><span class="va">stim</span>, basis <span class="op">=</span> <span class="st">"BLOCK(2,1)"</span><span class="op">)</span>, <span class="co"># BLOCK(duration, penalty)</span></span>
-<span>  data <span class="op">=</span> <span class="va">simple_design</span>, </span>
-<span>  block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>, </span>
+<span>  <span class="va">onset</span> <span class="op">~</span> <span class="fu"><a href="../reference/afni_hrf.html">afni_hrf</a></span><span class="op">(</span><span class="va">stim</span>, basis <span class="op">=</span> <span class="st">"block"</span>, durations <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">simple_design</span>,</span>
+<span>  block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>,</span>
 <span>  sampling_frame <span class="op">=</span> <span class="va">sframe</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -238,6 +250,30 @@ handle the HRF modeling using its optimized routines.</p>
 <p>Refer to the <code><a href="../reference/afni_hrf.html">afni_hrf()</a></code> documentation and the
 <code>3dDeconvolve</code> help for details on available AFNI basis
 functions and their parameters.</p>
+</div>
+<div class="section level2">
+<h2 id="trialwise-modulation--stim_times_im">Trialwise Modulation (<code>-stim_times_IM</code>)<a class="anchor" aria-label="anchor" href="#trialwise-modulation--stim_times_im"></a>
+</h2>
+<p>For per-trial modulation (e.g., reaction time), use
+<code><a href="../reference/afni_trialwise.html">afni_trialwise()</a></code>, which maps to
+<code>-stim_times_IM</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add a continuous modulator (e.g., RT scaled 0.2–0.8 s)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">simple_design</span><span class="op">$</span><span class="va">rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">simple_design</span><span class="op">)</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">emodel_tw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fmridesign/man/event_model.html" class="external-link">event_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">onset</span> <span class="op">~</span> <span class="fu"><a href="../reference/afni_trialwise.html">afni_trialwise</a></span><span class="op">(</span><span class="va">rt</span>, basis <span class="op">=</span> <span class="st">"gamma"</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">simple_design</span>,</span>
+<span>  block <span class="op">=</span> <span class="op">~</span> <span class="va">run</span>,</span>
+<span>  sampling_frame <span class="op">=</span> <span class="va">sframe</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fmodel_tw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bbuchsbaum.github.io/fmrireg/reference/fmri_model.html" class="external-link">fmri_model</a></span><span class="op">(</span><span class="va">emodel_tw</span>, <span class="va">bmodel</span><span class="op">)</span></span>
+<span><span class="va">alm_spec_tw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel_tw</span>, <span class="va">dset</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_tw</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The command should include -stim_times_IM for the trialwise regressor.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="handling-nuisance-regressors-and-censoring">Handling Nuisance Regressors and Censoring<a class="anchor" aria-label="anchor" href="#handling-nuisance-regressors-and-censoring"></a>
@@ -256,7 +292,7 @@ list of vectors per run) to the <code>censor</code> argument of
 and add the <code>-censor censor.1D</code> option to the
 <code>3dDeconvolve</code> command.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Censor the first 5 scans</span></span>
 <span><span class="va">censor_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">140</span><span class="op">)</span> <span class="co"># Start with all scans included (1)</span></span>
 <span><span class="va">censor_vec</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span>       <span class="co"># Censor first 5 scans (0)</span></span>
@@ -265,12 +301,43 @@ and add the <code>-censor censor.1D</code> option to the
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_censored</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="dry-runs-with--nodata-and-design-inspection">Dry Runs with <code>-nodata</code> and Design Inspection<a class="anchor" aria-label="anchor" href="#dry-runs-with--nodata-and-design-inspection"></a>
+</h2>
+<p>You can validate command generation without data by providing
+<code>nodata = c(nTR, TR)</code>. Combine with
+<code>x1D_stop = TRUE</code> to write the design matrix
+(<code>.xmat.1D</code>) and stop before fitting.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Single run of 140 TRs with TR=2 sec</span></span>
+<span><span class="va">alm_spec_nodata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span></span>
+<span>  <span class="va">fmodel</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nodata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="va">TR</span><span class="op">)</span>,</span>
+<span>  x1D_stop <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bucket <span class="op">=</span> <span class="st">"stats_afni"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_nodata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Then generate files/scripts without executing AFNI:</span></span>
+<span><span class="co"># run(alm_spec_nodata, outdir = "glm_afni_x1d", execute = FALSE)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="impulse-responses--iresp">Impulse Responses (<code>-iresp</code>)<a class="anchor" aria-label="anchor" href="#impulse-responses--iresp"></a>
+</h2>
+<p>Set <code>iresp = TRUE</code> in <code><a href="../reference/afni_lm.html">afni_lm()</a></code> to have AFNI
+write impulse response estimates for <code><a href="../reference/afni_hrf.html">afni_hrf()</a></code> terms.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alm_spec_iresp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/afni_lm.html">afni_lm</a></span><span class="op">(</span><span class="va">fmodel_afni</span>, <span class="va">dset</span>, iresp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alm_spec_iresp</span><span class="op">)</span></span>
+<span><span class="co"># Look for -iresp entries paired with -stim_times terms.</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="generating-files-and-running-the-model">Generating Files and Running the Model<a class="anchor" aria-label="anchor" href="#generating-files-and-running-the-model"></a>
 </h2>
 <p>Once you have the <code>afni_lm_spec</code> object, you can generate
 the necessary files and optionally execute the <code>3dDeconvolve</code>
 command using the <code><a href="../reference/run.html">run()</a></code> method.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This command will:</span></span>
 <span><span class="co"># 1. Create the output directory 'glm_afni_output'.</span></span>
 <span><span class="co"># 2. Change into that directory.</span></span>
