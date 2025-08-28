@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   afni_tutorial: afni_tutorial.html
-last_built: 2025-08-28T17:33Z
+last_built: 2025-08-28T18:15Z
 urls:
   reference: https://bbuchsbaum.github.io/afnireg/reference
   article: https://bbuchsbaum.github.io/afnireg/articles
